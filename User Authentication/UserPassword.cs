@@ -11,7 +11,7 @@ namespace UserAuthentication.cs
             LoadCredentials(); // Load the user credentials from the file
         }
 
-        private void LoadCredentials() // Method to load the user credentials from the file
+        public void LoadCredentials() // Method to load the user credentials from the file
         {
             try
             {
@@ -39,7 +39,7 @@ namespace UserAuthentication.cs
             }
         }
 
-        private void SaveCredentials() // Method to save the user credentials to the file
+        public void SaveCredentials() // Method to save the user credentials to the file
         {
             try
             {
