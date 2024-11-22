@@ -8,3 +8,4 @@ obj/Easy-Peasy-ShoppingList.csproj.nuget.dgspec.json
 obj/Easy-Peasy-ShoppingList.csproj.nuget.g.props
 obj/project.assets.json
 obj/project.nuget.cache
+*.cache
