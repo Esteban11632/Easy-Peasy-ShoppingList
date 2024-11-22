@@ -1,7 +1,7 @@
-namespace UserAuthentication.cs
+namespace UserAuthentication
 {
     public interface IUserValidator
     {
-        bool ValidateCredentials(string username, string password);
+        bool ValidateCredentials(string username, string password, string FamilyGroup);
     }
 }

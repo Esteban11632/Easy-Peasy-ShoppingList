@@ -1,8 +1,8 @@
-namespace UserAuthentication.cs
+namespace UserAuthentication
 {
     public class UserValidator : IUserValidator
     {
-        public bool ValidateCredentials(string username, string password)
+        public bool ValidateCredentials(string username, string password, string FamilyGroup)
         {
             // Check if username or password is null or empty
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))

@@ -1,4 +1,4 @@
-namespace UserAuthentication.cs
+namespace UserAuthentication
 {
     public interface ILogin // Interface for logging in a user
     {

@@ -1,8 +1,10 @@
-namespace UserAuthentication.cs
+namespace UserAuthentication
 {
-        public interface ICredentialStorage
+    public interface ICredentialStorage
     {
-        Dictionary<string, (string password, bool isAdmin)> LoadCredentials();
-        void SaveCredentials(Dictionary<string, (string password, bool isAdmin)> credentials);
+        Dictionary<string, UserCredentials> LoadCredentials(); // Method to load the credentials
+        void SaveCredentials(Dictionary<string, UserCredentials> credentials); // Method to save the credentials
+        (HashSet<string> groups, Dictionary<string, string> admins) LoadFamilyGroups(); // Method to load the family groups
+        void SaveFamilyGroups(HashSet<string> groups, Dictionary<string, string> admins); // Method to save the family groups
     }
 }
