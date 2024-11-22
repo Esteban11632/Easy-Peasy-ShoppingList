@@ -17,87 +17,78 @@ namespace UserAuthentication.cs
             _userCredentials = new Dictionary<string, (string password, bool isAdmin)>();
         }
 
-        public void LoadUser()
+        public void LoadUser() // Load credentials of the users
         {
             try
             {
-                _userCredentials = _storage.LoadCredentials();
-                if (!_userCredentials.Any())
-                {
-                    CreateDefaultAdmin();
-                }
+                _userCredentials = _storage.LoadCredentials(); // Store the credentials in _userCredentials
             }
-            catch (Exception ex)
+            catch (Exception ex) // Exception
             {
-                RaiseAuthenticationMessage($"Error loading credentials: {ex.Message}");
+                RaiseAuthenticationMessage($"Error loading credentials: {ex.Message}"); // Indicates there is an error in the loading of credentials
                 throw;
             }
         }
 
-        public void SaveUser()
+        public void SaveUser() // Save user credentials in file
         {
             try
             {
-                _storage.SaveCredentials(_userCredentials);
+                _storage.SaveCredentials(_userCredentials); // Store the credentials
             }
-            catch (Exception ex)
+            catch (Exception ex) // Exception
             {
-                throw new Exception($"Error saving credentials: {ex.Message}");
+                throw new Exception($"Error saving credentials: {ex.Message}"); // Error in saving the credentials
             }
         }
 
-        public bool Register(string username, string password, bool isAdmin = false)
+        public bool Register(string username, string password, bool isAdmin = false) // Resgiste the user in the files
         {
-            if (!_validator.ValidateCredentials(username, password))
+            if (!_validator.ValidateCredentials(username, password)) // Validate the credentials to register in the files
             {
-                RaiseAuthenticationMessage("Invalid credentials format");
+                RaiseAuthenticationMessage("Invalid credentials format"); // If they are invalid, throw an authentication message
                 return false;
             }
 
-            if (_userCredentials.ContainsKey(username))
+            if (_userCredentials.ContainsKey(username)) // Checks if the user already exists
             {
-                RaiseAuthenticationMessage("Username already exists");
+                RaiseAuthenticationMessage("Username already exists"); // Throw an authentication message that the user already exists
                 return false;
             }
 
-            _userCredentials.Add(username, (password, isAdmin));
-            SaveUser();
-            RaiseAuthenticationMessage($"Registration successful. User type: {(isAdmin ? "Admin" : "Regular User")}");
+            _userCredentials.Add(username, (password, isAdmin)); // Save the new credentials in the dictionary _userCredentials
+            SaveUser(); // Save credentials in the file
+            RaiseAuthenticationMessage($"Registration successful. User type: {(isAdmin ? "Admin" : "Regular User")}"); // Throw an authentication message that the save was succesfull
             return true;
         }
 
-        public bool Login(string username, string password)
+        public bool Login(string username, string password) // Makes the user login to their account
         {
-            if (!_userCredentials.ContainsKey(username))
+            if (!_userCredentials.ContainsKey(username)) // Check if the user is correct
             {
-                RaiseAuthenticationMessage("Invalid username");
+                RaiseAuthenticationMessage("Invalid username"); // Throws a invalid username message authentication
                 return false;
             }
 
-            var userInfo = _userCredentials[username];
-            if (password != userInfo.password)
+            var userInfo = _userCredentials[username]; // Puts the user name in userInfo
+            if (password != userInfo.password) // Checks the input password in the userInfo password key
             {
-                RaiseAuthenticationMessage("Invalid password");
+                RaiseAuthenticationMessage("Invalid password"); // Throws an authentication message of invalid password
                 return false;
             }
 
-            RaiseAuthenticationMessage($"Login successful. User type: {(userInfo.isAdmin ? "Admin" : "Regular User")}");
+            RaiseAuthenticationMessage($"Login successful. User type: {(userInfo.isAdmin ? "Admin" : "Regular User")}"); // Throws an authentication message of login successful
             return true;
         }
 
-        public bool IsAdmin(string username)
+        public bool IsAdmin(string username) // Checks if the user is an admin
         {
-            return _userCredentials.ContainsKey(username) && _userCredentials[username].isAdmin;
+            return _userCredentials.ContainsKey(username) && _userCredentials[username].isAdmin; // Returns true if the user is an admin
         }
 
-        private void CreateDefaultAdmin()
+        private void RaiseAuthenticationMessage(string message) // Raises an authentication message
         {
-            Register("admin", "admin123", true);
-        }
-
-        private void RaiseAuthenticationMessage(string message)
-        {
-            OnAuthenticationMessage?.Invoke(this, message);
+            OnAuthenticationMessage?.Invoke(this, message); // Invokes the authentication message
         }
     }
 }
