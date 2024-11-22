@@ -1,97 +1,103 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace UserAuthentication.cs
 {
-    public class UserPassword : ILogin, IRegister // Class for using passwords
+    public class UserPassword : ILogin, IRegister
     {
-        private Dictionary<string, string> _userCredentials; // Dictionary to store the user credentials
-        private readonly string _filePath; // File path for the user credentials
+        private readonly ICredentialStorage _storage;
+        private readonly IUserValidator _validator;
+        private Dictionary<string, (string password, bool isAdmin)> _userCredentials;
 
-        public UserPassword(string filePath = "credentials.txt") // Constructor for the UserPassword class
+        public event EventHandler<string>? OnAuthenticationMessage;
+
+        public UserPassword(ICredentialStorage storage, IUserValidator validator)
         {
-            _userCredentials = new Dictionary<string, string>(); // Initialize the dictionary
-            _filePath = filePath; // Set the file path
-            LoadCredentials(); // Load the user credentials from the file
+            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _userCredentials = new Dictionary<string, (string password, bool isAdmin)>();
         }
 
-        public void LoadCredentials() // Method to load the user credentials from the file
+        public void LoadUser()
         {
             try
             {
-                // Create file if it doesn't exist
-                if (!File.Exists(_filePath)) // Check if the file exists
+                _userCredentials = _storage.LoadCredentials();
+                if (!_userCredentials.Any())
                 {
-                    File.Create(_filePath).Close(); // Create the file
-                    return;
-                }
-
-                // Read all lines from file
-                string[] lines = File.ReadAllLines(_filePath); // Read all lines from the file
-                foreach (string line in lines) // Loop through each line
-                {
-                    string[] parts = line.Split(','); // Split the line into parts
-                    if (parts.Length == 2) // Check if the line has two parts
-                    {
-                        _userCredentials[parts[0]] = parts[1]; // Add the username and password to the dictionary
-                    }
+                    CreateDefaultAdmin();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading credentials: {ex.Message}"); // Log the error
+                RaiseAuthenticationMessage($"Error loading credentials: {ex.Message}");
+                throw;
             }
         }
 
-        public void SaveCredentials() // Method to save the user credentials to the file
+        public void SaveUser()
         {
             try
             {
-                // Convert dictionary to lines of text
-                List<string> lines = _userCredentials // Convert the dictionary to a list of strings
-                    .Select(kvp => $"{kvp.Key},{kvp.Value}") // Convert each key-value pair to a string
-                    .ToList(); // Convert the list of strings to a list
-
-                // Write all lines to file
-                File.WriteAllLines(_filePath, lines); // Write all lines to the file
+                _storage.SaveCredentials(_userCredentials);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving credentials: {ex.Message}"); // Log the error
+                throw new Exception($"Error saving credentials: {ex.Message}");
             }
         }
 
-        public bool Register(string username, string password) // Method to register the user
+        public bool Register(string username, string password, bool isAdmin = false)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) // Check if the username or password is empty
+            if (!_validator.ValidateCredentials(username, password))
             {
-                Console.WriteLine("Username and password cannot be empty"); // Log the empty username or password
-                return false; // Return false to indicate the registration failed
+                RaiseAuthenticationMessage("Invalid credentials format");
+                return false;
             }
 
-            if (_userCredentials.ContainsKey(username)) // Check if the username exists
+            if (_userCredentials.ContainsKey(username))
             {
-                Console.WriteLine("Username already exists"); // Log the username already exists
-                return false; // Return false to indicate the registration failed
+                RaiseAuthenticationMessage("Username already exists");
+                return false;
             }
 
-            _userCredentials.Add(username, password); // Add the new user to the dictionary
-            SaveCredentials(); // Save the user credentials to the file
-            Console.WriteLine("Registration successful"); // Log the successful registration
-            return true; // Return true to indicate the registration was successful
+            _userCredentials.Add(username, (password, isAdmin));
+            SaveUser();
+            RaiseAuthenticationMessage($"Registration successful. User type: {(isAdmin ? "Admin" : "Regular User")}");
+            return true;
         }
 
-        public bool Login(string username, string password) // Method to login the user
+        public bool Login(string username, string password)
         {
-            if (_userCredentials.ContainsKey(username)) // Check if the username exists
+            if (!_userCredentials.ContainsKey(username))
             {
-                if (password == _userCredentials[username])
-                {
-                    Console.WriteLine("Login successful"); // Log the successful login
-                    return true; // Return true to indicate the login was successful
-                }
-                Console.WriteLine("Invalid password"); // Log the invalid password
-                return false; // Return false to indicate the login failed
+                RaiseAuthenticationMessage("Invalid username");
+                return false;
             }
-            Console.WriteLine("Invalid username"); // Log the invalid username
-            return false; // Return false to indicate the login failed
+
+            var userInfo = _userCredentials[username];
+            if (password != userInfo.password)
+            {
+                RaiseAuthenticationMessage("Invalid password");
+                return false;
+            }
+
+            RaiseAuthenticationMessage($"Login successful. User type: {(userInfo.isAdmin ? "Admin" : "Regular User")}");
+            return true;
+        }
+
+        public bool IsAdmin(string username)
+        {
+            return _userCredentials.ContainsKey(username) && _userCredentials[username].isAdmin;
+        }
+
+        private void CreateDefaultAdmin()
+        {
+            Register("admin", "admin123", true);
+        }
+
+        private void RaiseAuthenticationMessage(string message)
+        {
+            OnAuthenticationMessage?.Invoke(this, message);
         }
     }
 }
