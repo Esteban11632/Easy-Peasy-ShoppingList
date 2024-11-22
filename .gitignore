@@ -10,3 +10,4 @@ obj/project.assets.json
 obj/project.nuget.cache
 *.cache
 obj/project.assets.json
+*.editorconfig
