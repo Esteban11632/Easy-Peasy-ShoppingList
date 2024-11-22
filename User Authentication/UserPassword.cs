@@ -2,19 +2,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UserAuthentication.cs
 {
-    public class UserPassword : ILogin, IRegister
+    public class UserPassword : ILogin, IRegister // Implements the ILogin and IRegister interfaces
     {
-        private readonly ICredentialStorage _storage;
-        private readonly IUserValidator _validator;
-        private Dictionary<string, (string password, bool isAdmin)> _userCredentials;
+        private readonly ICredentialStorage _storage; // Stores the credentials
+        private readonly IUserValidator _validator; // Validates the credentials
+        private Dictionary<string, (string password, bool isAdmin)> _userCredentials; // Stores the user credentials
 
-        public event EventHandler<string>? OnAuthenticationMessage;
+        public event EventHandler<string>? OnAuthenticationMessage; // Event handler for the authentication message
 
-        public UserPassword(ICredentialStorage storage, IUserValidator validator)
+        public UserPassword(ICredentialStorage storage, IUserValidator validator) // Constructor for the UserPassword class
         {
-            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _userCredentials = new Dictionary<string, (string password, bool isAdmin)>();
+            _storage = storage ?? throw new ArgumentNullException(nameof(storage)); // Stores the credentials
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator)); // Validates the credentials
+            _userCredentials = new Dictionary<string, (string password, bool isAdmin)>(); // Stores the user credentials
         }
 
         public void LoadUser() // Load credentials of the users
