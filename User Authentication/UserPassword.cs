@@ -3,11 +3,12 @@ namespace UserAuthentication.cs
     public class UserPassword : ILogin, IRegister // Class for using passwords
     {
         private Dictionary<string, string> _userCredentials; // Dictionary to store the user credentials
-        private readonly string _filePath = "credentials.txt"; // File path for the user credentials
+        private readonly string _filePath; // File path for the user credentials
 
-        public UserPassword() // Constructor for the UserPassword class
+        public UserPassword(string filePath = "credentials.txt") // Constructor for the UserPassword class
         {
             _userCredentials = new Dictionary<string, string>(); // Initialize the dictionary
+            _filePath = filePath; // Set the file path
             LoadCredentials(); // Load the user credentials from the file
         }
 
@@ -57,21 +58,8 @@ namespace UserAuthentication.cs
             }
         }
 
-        private (string username, string password) GetUserInput() // Method to get the user input
+        public bool Register(string username, string password) // Method to register the user
         {
-            Console.WriteLine("Enter username: "); // Log the username input
-            string? username = Console.ReadLine(); // Get the username input
-            
-            Console.WriteLine("Enter password: "); // Log the password input
-            string? password = Console.ReadLine(); // Get the password input
-
-            return (username ?? string.Empty, password ?? string.Empty); // Return the username and password
-        }
-
-        public bool Register() // Method to register the user
-        {
-            var (username, password) = GetUserInput(); // Get the username and password
-
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) // Check if the username or password is empty
             {
                 Console.WriteLine("Username and password cannot be empty"); // Log the empty username or password
@@ -90,10 +78,8 @@ namespace UserAuthentication.cs
             return true; // Return true to indicate the registration was successful
         }
 
-        public bool Login() // Method to login the user
+        public bool Login(string username, string password) // Method to login the user
         {
-            var (username, password) = GetUserInput(); // Get the username and password
-
             if (_userCredentials.ContainsKey(username)) // Check if the username exists
             {
                 if (password == _userCredentials[username])

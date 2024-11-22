@@ -1,0 +1,15 @@
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\bin\Debug\net8.0\Easy-Peasy-ShoppingList.exe
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\bin\Debug\net8.0\Easy-Peasy-ShoppingList.deps.json
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\bin\Debug\net8.0\Easy-Peasy-ShoppingList.runtimeconfig.json
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\bin\Debug\net8.0\Easy-Peasy-ShoppingList.dll
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\bin\Debug\net8.0\Easy-Peasy-ShoppingList.pdb
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\Easy-Peasy-ShoppingList.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\Easy-Peasy-ShoppingList.AssemblyInfoInputs.cache
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\Easy-Peasy-ShoppingList.AssemblyInfo.cs
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\Easy-Peasy-ShoppingList.csproj.CoreCompileInputs.cache
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\Easy-Peasy-ShoppingList.sourcelink.json
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\Easy-Peasy-ShoppingList.dll
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\refint\Easy-Peasy-ShoppingList.dll
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\Easy-Peasy-ShoppingList.pdb
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\Easy-Peasy-ShoppingList.genruntimeconfig.cache
+C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\obj\Debug\net8.0\ref\Easy-Peasy-ShoppingList.dll

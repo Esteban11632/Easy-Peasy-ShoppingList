@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Easy-Peasy-ShoppingList/1.0.0": {
+        "runtime": {
+          "Easy-Peasy-ShoppingList.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Easy-Peasy-ShoppingList/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
