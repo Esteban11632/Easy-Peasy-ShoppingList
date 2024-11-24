@@ -13,7 +13,19 @@
     <link href="css/shopping-list.css" rel="stylesheet" />
 </head>
 <body>
-    <component type="typeof(App)" render-mode="ServerPrerendered" />
+    <component type="typeof(App)" render-mode="Server" />
     <script src="_framework/blazor.server.js"></script>
+    <script>
+        window.initializeTheme = () => {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            return theme === 'dark';
+        };
+        
+        window.setTheme = (theme) => {
+            localStorage.setItem('theme', theme);
+            document.documentElement.setAttribute('data-theme', theme);
+        };
+    </script>
 </body>
 </html>

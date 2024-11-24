@@ -1,5 +1,44 @@
+@using Microsoft.JSInterop
 @inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
 
-<main>
-    @Body
-</main>
+<div class="page">
+    <button onclick="@(async () => await ToggleTheme())" class="theme-toggle">
+        @(isDarkMode ? "☀️ Light" : "🌙 Dark")
+    </button>
+
+    <main>
+        @Body
+    </main>
+</div>
+
+@code {
+    private bool isDarkMode;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isDarkMode = await JSRuntime.InvokeAsync<bool>("initializeTheme");
+            StateHasChanged();
+        }
+        catch
+        {
+            isDarkMode = false;
+        }
+    }
+
+    private async Task ToggleTheme()
+    {
+        try
+        {
+            isDarkMode = !isDarkMode;
+            var theme = isDarkMode ? "dark" : "light";
+            await JSRuntime.InvokeVoidAsync("setTheme", theme);
+        }
+        catch
+        {
+            isDarkMode = !isDarkMode;
+        }
+    }
+}

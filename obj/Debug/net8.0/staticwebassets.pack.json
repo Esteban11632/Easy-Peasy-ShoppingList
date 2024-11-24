@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\css\\shopping-list.css"
     },
     {
+      "Id": "D:\\Programming\\SoftwareEngineering\\Easy-Peasy-ShoppingList\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Easy-Peasy-ShoppingList.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
