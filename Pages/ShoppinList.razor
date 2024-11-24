@@ -1,14 +1,15 @@
 @page "/"
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
 @inject IJSRuntime JSRuntime
 
 <div class="shopping-list-container">
     <h3>Shopping List</h3>
 
     <div class="add-item-form">
-        <input @bind-value="newItem.Name" @bind-value:event="oninput" placeholder="Item name" />
-        <select @bind-value="newItem.Category" @bind-value:event="onchange">
+        <input @bind="newItem.Name" placeholder="Item name" />
+        <select @bind="newItem.Category">
             <option value="">Select Category</option>
             <option value="Groceries">Groceries</option>
             <option value="Electronics">Electronics</option>
@@ -16,9 +17,9 @@
             <option value="Home">Home & Garden</option>
             <option value="Other">Other</option>
         </select>
-        <input @bind-value="newItem.Price" @bind-value:event="oninput" type="number" step="0.01" placeholder="Price" />
-        <input @bind-value="newItem.Quantity" @bind-value:event="oninput" type="number" placeholder="Quantity" />
-        <button @onclick="AddItem" class="btn btn-primary">Add Item</button>
+        <input @bind="newItem.Price" type="number" step="0.01" placeholder="Price" />
+        <input @bind="newItem.Quantity" type="number" placeholder="Quantity" />
+        <button @onclick="HandleAddItem" class="btn btn-primary">Add Item</button>
     </div>
 
     <div class="filter-section">
@@ -75,37 +76,40 @@
             ? shoppingItems
             : shoppingItems.Where(item => item.Category == selectedCategory);
 
-    private async Task AddItem()
+    private void HandleAddItem(MouseEventArgs e)
     {
-        await JSRuntime.InvokeVoidAsync("console.log", "Add Item button clicked");
-        await JSRuntime.InvokeVoidAsync("console.log", new { 
-            Name = newItem.Name, 
-            Category = newItem.Category,
-            Price = newItem.Price,
-            Quantity = newItem.Quantity
-        });
-        
-        if (string.IsNullOrWhiteSpace(newItem.Name) || 
-            string.IsNullOrWhiteSpace(newItem.Category))
+        try 
         {
-            await JSRuntime.InvokeVoidAsync("console.log", "Validation failed");
-            return;
+            Console.WriteLine($"Button clicked at position: {e.ClientX}, {e.ClientY}");
+            Console.WriteLine($"Current newItem values: Name={newItem.Name}, Category={newItem.Category}, Price={newItem.Price}, Quantity={newItem.Quantity}");
+            
+            if (string.IsNullOrWhiteSpace(newItem.Name) || 
+                string.IsNullOrWhiteSpace(newItem.Category))
+            {
+                Console.WriteLine("Validation failed - Name or Category is empty");
+                return;
+            }
+
+            var item = new ShoppingItem
+            {
+                Name = newItem.Name,
+                Category = newItem.Category,
+                Price = newItem.Price,
+                Quantity = newItem.Quantity > 0 ? newItem.Quantity : 1
+            };
+
+            shoppingItems.Add(item);
+            Console.WriteLine($"Item added successfully: {item.Name}");
+            Console.WriteLine($"Current shopping list count: {shoppingItems.Count}");
+            
+            newItem = new ShoppingItem();
+            StateHasChanged();
         }
-
-        var item = new ShoppingItem
+        catch (Exception ex)
         {
-            Name = newItem.Name,
-            Category = newItem.Category,
-            Price = newItem.Price,
-            Quantity = newItem.Quantity > 0 ? newItem.Quantity : 1
-        };
-
-        shoppingItems.Add(item);
-        await JSRuntime.InvokeVoidAsync("console.log", "Item added successfully");
-        await JSRuntime.InvokeVoidAsync("console.log", shoppingItems.Count);
-        
-        newItem = new ShoppingItem();
-        StateHasChanged();
+            Console.WriteLine($"Error in HandleAddItem: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+        }
     }
 
     private void RemoveItem(ShoppingItem item)
