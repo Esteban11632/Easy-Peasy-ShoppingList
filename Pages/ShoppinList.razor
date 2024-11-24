@@ -80,13 +80,28 @@
     {
         try 
         {
-            Console.WriteLine($"Button clicked at position: {e.ClientX}, {e.ClientY}");
-            Console.WriteLine($"Current newItem values: Name={newItem.Name}, Category={newItem.Category}, Price={newItem.Price}, Quantity={newItem.Quantity}");
+            string errorMessage = "";
             
-            if (string.IsNullOrWhiteSpace(newItem.Name) || 
-                string.IsNullOrWhiteSpace(newItem.Category))
+            if (string.IsNullOrWhiteSpace(newItem.Name))
             {
-                Console.WriteLine("Validation failed - Name or Category is empty");
+                errorMessage += "Please enter an item name.\n";
+            }
+            if (string.IsNullOrWhiteSpace(newItem.Category))
+            {
+                errorMessage += "Please select a category.\n";
+            }
+            if (newItem.Price <= 0)
+            {
+                errorMessage += "Please enter a valid price.\n";
+            }
+            if (newItem.Quantity <= 0)
+            {
+                errorMessage += "Please enter a valid quantity.\n";
+            }
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                _ = JSRuntime.InvokeVoidAsync("alert", errorMessage);
                 return;
             }
 
@@ -95,20 +110,16 @@
                 Name = newItem.Name,
                 Category = newItem.Category,
                 Price = newItem.Price,
-                Quantity = newItem.Quantity > 0 ? newItem.Quantity : 1
+                Quantity = newItem.Quantity
             };
 
             shoppingItems.Add(item);
-            Console.WriteLine($"Item added successfully: {item.Name}");
-            Console.WriteLine($"Current shopping list count: {shoppingItems.Count}");
-            
             newItem = new ShoppingItem();
             StateHasChanged();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error in HandleAddItem: {ex.Message}");
-            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+            _ = JSRuntime.InvokeVoidAsync("alert", $"Error: {ex.Message}");
         }
     }
 
