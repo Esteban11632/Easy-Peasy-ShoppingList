@@ -2,6 +2,6 @@ namespace TaskManager
 {
     public interface IViewTask
     {
-        void DisplayTask(Task task); // Method to display the task
+        void DisplayTask(string username, string familyGroup); // Method to display the task    
     }
 }

@@ -43,7 +43,7 @@ namespace UserAuthentication
             }
         }
 
-        public bool Register(string username, string password, string FamilyGroup, bool isAdmin = false) // Resgiste the user in the files
+        public bool Register(string username, string password, string FamilyGroup, bool isAdmin = false) // Resgiste the user in the files, need explicit true for admin to be admin
         {
             if (!_validator.ValidateCredentials(username, password, FamilyGroup)) // Validate the credentials to register in the files
             {

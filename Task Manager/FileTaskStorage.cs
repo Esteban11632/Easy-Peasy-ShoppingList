@@ -46,6 +46,12 @@ namespace TaskManager
             return tasks; // Returns the tasks
         }
 
+        public List<TodoTask> GetTasksByFamilyGroup(string familyGroup) // Method to get the tasks by family group
+        {
+            var tasks = LoadTasks(); // Loads the tasks
+            return tasks.Values.Where(task => task.FamilyGroup.Equals(familyGroup, StringComparison.OrdinalIgnoreCase)).ToList(); // Returns the tasks by family group
+        }
+
         public void SaveTasks(Dictionary<string, TodoTask> tasks) // Method to save the tasks
         {
             try // Try to save the tasks
