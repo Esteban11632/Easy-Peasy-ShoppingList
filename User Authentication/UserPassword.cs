@@ -9,7 +9,7 @@ namespace UserAuthentication
         private readonly IFamilyGroupManager _familyGroupManager; // Manages the family groups
         private Dictionary<string, UserCredentials> _userCredentials; // Stores the user credentials
         public event EventHandler<string>? OnAuthenticationMessage; // Event handler for the authentication message
-        public UserPassword(ICredentialStorage storage, IUserValidator validator, FamilyGroupManager familyGroupManager) // Constructor for the UserPassword class
+        public UserPassword(ICredentialStorage storage, IUserValidator validator, IFamilyGroupManager familyGroupManager) // Constructor for the UserPassword class
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage)); // Stores the credentials
             _validator = validator ?? throw new ArgumentNullException(nameof(validator)); // Validates the credentials
