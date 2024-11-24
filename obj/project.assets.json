@@ -576,7 +576,8 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Microsoft.AspNetCore.Components >= 8.0.0",
-      "Microsoft.AspNetCore.Components.Web >= 8.0.0"
+      "Microsoft.AspNetCore.Components.Web >= 8.0.0",
+      "Microsoft.JSInterop >= 8.0.0"
     ]
   },
   "packageFolders": {
@@ -626,6 +627,10 @@
             "version": "[8.0.0, )"
           },
           "Microsoft.AspNetCore.Components.Web": {
+            "target": "Package",
+            "version": "[8.0.0, )"
+          },
+          "Microsoft.JSInterop": {
             "target": "Package",
             "version": "[8.0.0, )"
           }

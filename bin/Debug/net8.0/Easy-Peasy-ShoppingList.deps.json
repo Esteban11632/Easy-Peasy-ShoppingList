@@ -9,7 +9,8 @@
       "Easy-Peasy-ShoppingList/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Components": "8.0.0",
-          "Microsoft.AspNetCore.Components.Web": "8.0.0"
+          "Microsoft.AspNetCore.Components.Web": "8.0.0",
+          "Microsoft.JSInterop": "8.0.0"
         },
         "runtime": {
           "Easy-Peasy-ShoppingList.dll": {}

@@ -59,3 +59,28 @@
   border-bottom: 1px solid var(--border-color);
   text-align: left;
 }
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.category-filter {
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  width: 200px;
+}
+
+select {
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.add-item-form select {
+  flex: 1;
+}

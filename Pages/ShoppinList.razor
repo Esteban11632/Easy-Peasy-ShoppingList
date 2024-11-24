@@ -1,19 +1,42 @@
 @page "/"
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components
+@inject IJSRuntime JSRuntime
 
 <div class="shopping-list-container">
     <h3>Shopping List</h3>
 
     <div class="add-item-form">
-        <input @bind="newItem.Name" placeholder="Item name" />
-        <input @bind="newItem.Price" type="number" step="0.01" placeholder="Price" />
-        <input @bind="newItem.Quantity" type="number" placeholder="Quantity" />
+        <input @bind-value="newItem.Name" @bind-value:event="oninput" placeholder="Item name" />
+        <select @bind-value="newItem.Category" @bind-value:event="onchange">
+            <option value="">Select Category</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Home">Home & Garden</option>
+            <option value="Other">Other</option>
+        </select>
+        <input @bind-value="newItem.Price" @bind-value:event="oninput" type="number" step="0.01" placeholder="Price" />
+        <input @bind-value="newItem.Quantity" @bind-value:event="oninput" type="number" placeholder="Quantity" />
         <button @onclick="AddItem" class="btn btn-primary">Add Item</button>
+    </div>
+
+    <div class="filter-section">
+        <select @bind-value="selectedCategory" @bind-value:event="onchange" class="category-filter">
+            <option value="">All Categories</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Home">Home & Garden</option>
+            <option value="Other">Other</option>
+        </select>
     </div>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Item</th>
+                <th>Category</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Total</th>
@@ -21,10 +44,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in shoppingItems)
+            @foreach (var item in FilteredItems)
             {
                 <tr>
                     <td>@item.Name</td>
+                    <td>@item.Category</td>
                     <td>@item.Price.ToString("C")</td>
                     <td>@item.Quantity</td>
                     <td>@((item.Price * item.Quantity).ToString("C"))</td>
@@ -37,37 +61,64 @@
     </table>
 
     <div class="total">
-        <h4>Total: @(shoppingItems.Sum(i => i.Price * i.Quantity).ToString("C"))</h4>
+        <h4>Total: @(FilteredItems.Sum(i => i.Price * i.Quantity).ToString("C"))</h4>
     </div>
 </div>
 
 @code {
     private List<ShoppingItem> shoppingItems = new();
     private ShoppingItem newItem = new();
+    private string selectedCategory = "";
 
-    private void AddItem()
+    private IEnumerable<ShoppingItem> FilteredItems =>
+        string.IsNullOrEmpty(selectedCategory)
+            ? shoppingItems
+            : shoppingItems.Where(item => item.Category == selectedCategory);
+
+    private async Task AddItem()
     {
-        if (!string.IsNullOrWhiteSpace(newItem.Name) && newItem.Price > 0 && newItem.Quantity > 0)
+        await JSRuntime.InvokeVoidAsync("console.log", "Add Item button clicked");
+        await JSRuntime.InvokeVoidAsync("console.log", new { 
+            Name = newItem.Name, 
+            Category = newItem.Category,
+            Price = newItem.Price,
+            Quantity = newItem.Quantity
+        });
+        
+        if (string.IsNullOrWhiteSpace(newItem.Name) || 
+            string.IsNullOrWhiteSpace(newItem.Category))
         {
-            shoppingItems.Add(new ShoppingItem
-            {
-                Name = newItem.Name,
-                Price = newItem.Price,
-                Quantity = newItem.Quantity
-            });
-            newItem = new ShoppingItem();
+            await JSRuntime.InvokeVoidAsync("console.log", "Validation failed");
+            return;
         }
+
+        var item = new ShoppingItem
+        {
+            Name = newItem.Name,
+            Category = newItem.Category,
+            Price = newItem.Price,
+            Quantity = newItem.Quantity > 0 ? newItem.Quantity : 1
+        };
+
+        shoppingItems.Add(item);
+        await JSRuntime.InvokeVoidAsync("console.log", "Item added successfully");
+        await JSRuntime.InvokeVoidAsync("console.log", shoppingItems.Count);
+        
+        newItem = new ShoppingItem();
+        StateHasChanged();
     }
 
     private void RemoveItem(ShoppingItem item)
     {
         shoppingItems.Remove(item);
+        StateHasChanged();
     }
 
     public class ShoppingItem
     {
         public string Name { get; set; } = "";
+        public string Category { get; set; } = "";
         public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public int Quantity { get; set; } = 1;
     }
 }
