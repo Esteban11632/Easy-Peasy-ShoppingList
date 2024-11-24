@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Easy-Peasy-ShoppingList.props" />
+</Project>

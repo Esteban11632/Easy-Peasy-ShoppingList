@@ -1,0 +1,73 @@
+@page "/"
+
+<div class="shopping-list-container">
+    <h3>Shopping List</h3>
+
+    <div class="add-item-form">
+        <input @bind="newItem.Name" placeholder="Item name" />
+        <input @bind="newItem.Price" type="number" step="0.01" placeholder="Price" />
+        <input @bind="newItem.Quantity" type="number" placeholder="Quantity" />
+        <button @onclick="AddItem" class="btn btn-primary">Add Item</button>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in shoppingItems)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@item.Quantity</td>
+                    <td>@((item.Price * item.Quantity).ToString("C"))</td>
+                    <td>
+                        <button @onclick="() => RemoveItem(item)" class="btn btn-danger">Remove</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="total">
+        <h4>Total: @(shoppingItems.Sum(i => i.Price * i.Quantity).ToString("C"))</h4>
+    </div>
+</div>
+
+@code {
+    private List<ShoppingItem> shoppingItems = new();
+    private ShoppingItem newItem = new();
+
+    private void AddItem()
+    {
+        if (!string.IsNullOrWhiteSpace(newItem.Name) && newItem.Price > 0 && newItem.Quantity > 0)
+        {
+            shoppingItems.Add(new ShoppingItem
+            {
+                Name = newItem.Name,
+                Price = newItem.Price,
+                Quantity = newItem.Quantity
+            });
+            newItem = new ShoppingItem();
+        }
+    }
+
+    private void RemoveItem(ShoppingItem item)
+    {
+        shoppingItems.Remove(item);
+    }
+
+    public class ShoppingItem
+    {
+        public string Name { get; set; } = "";
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+    }
+}

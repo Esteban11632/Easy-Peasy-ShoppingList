@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Programming\\SoftwareEngineering\\Easy-Peasy-ShoppingList\\wwwroot\\css\\shopping-list.css",
+      "PackagePath": "staticwebassets\\css\\shopping-list.css"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Easy-Peasy-ShoppingList.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Easy-Peasy-ShoppingList.props",
+      "PackagePath": "build\\Easy-Peasy-ShoppingList.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Easy-Peasy-ShoppingList.props",
+      "PackagePath": "buildMultiTargeting\\Easy-Peasy-ShoppingList.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Easy-Peasy-ShoppingList.props",
+      "PackagePath": "buildTransitive\\Easy-Peasy-ShoppingList.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
