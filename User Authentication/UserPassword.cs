@@ -57,9 +57,10 @@ namespace UserAuthentication
                 return false;
             }
 
-            if (!_familyGroupManager.FamilyGroupExists(FamilyGroup)) // Checks if the family group exists
+            // Only check for existing family group if the user is NOT an admin
+            if (!isAdmin && !_familyGroupManager.FamilyGroupExists(FamilyGroup))
             {
-                RaiseAuthenticationMessage("Invalid family group"); // Throws an authentication message of invalid family group
+                RaiseAuthenticationMessage("Invalid family group");
                 return false;
             }
 
