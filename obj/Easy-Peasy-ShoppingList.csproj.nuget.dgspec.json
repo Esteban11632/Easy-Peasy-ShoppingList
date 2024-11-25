@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Programming\\SoftwareEngineering\\Easy-Peasy-ShoppingList\\Easy-Peasy-ShoppingList.csproj": {}
+    "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\Easy-Peasy-ShoppingList.csproj": {}
   },
   "projects": {
-    "D:\\Programming\\SoftwareEngineering\\Easy-Peasy-ShoppingList\\Easy-Peasy-ShoppingList.csproj": {
+    "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\Easy-Peasy-ShoppingList.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programming\\SoftwareEngineering\\Easy-Peasy-ShoppingList\\Easy-Peasy-ShoppingList.csproj",
+        "projectUniqueName": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\Easy-Peasy-ShoppingList.csproj",
         "projectName": "Easy-Peasy-ShoppingList",
-        "projectPath": "D:\\Programming\\SoftwareEngineering\\Easy-Peasy-ShoppingList\\Easy-Peasy-ShoppingList.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "D:\\Programming\\SoftwareEngineering\\Easy-Peasy-ShoppingList\\obj\\",
+        "projectPath": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\Easy-Peasy-ShoppingList.csproj",
+        "packagesPath": "C:\\Users\\jairo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\jairo\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"

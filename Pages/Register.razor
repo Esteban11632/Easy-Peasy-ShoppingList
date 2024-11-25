@@ -1,0 +1,103 @@
+@page "/register"
+@using UserAuthentication
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+@inject IRegister RegisterService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<div class="register-container">
+    <h3>Register New Account</h3>
+
+    <EditForm Model="@registerModel" OnValidSubmit="HandleRegister">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <InputText id="username" @bind-Value="registerModel.Username" class="form-control" />
+            <ValidationMessage For="@(() => registerModel.Username)" />
+            <small class="form-text text-muted">Username must be 3-20 characters, containing only letters, numbers, or underscore.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <InputText type="password" id="password" @bind-Value="registerModel.Password" class="form-control" />
+            <ValidationMessage For="@(() => registerModel.Password)" />
+            <small class="form-text text-muted">Password must be 6-20 characters, containing uppercase, lowercase, and numbers.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="familyGroup">Family Group:</label>
+            <InputSelect id="familyGroup" @bind-Value="registerModel.FamilyGroup" class="form-control">
+                <option value="">Select Family Group</option>
+                @foreach (var group in familyGroups)
+                {
+                        <option value="@group">@group</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => registerModel.FamilyGroup)" />
+        </div>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+                <div class="alert alert-danger">
+                @errorMessage
+                </div>
+        }
+
+        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="button" class="btn btn-secondary" @onclick="NavigateToLogin">Back to Login</button>
+    </EditForm>
+</div>
+
+@code {
+    private RegisterModel registerModel = new();
+    private string errorMessage = string.Empty;
+    private IEnumerable<string> familyGroups = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        var userPassword = (UserPassword)RegisterService;
+        userPassword.OnAuthenticationMessage += HandleAuthMessage;
+        LoadFamilyGroups();
+    }
+
+    private void LoadFamilyGroups()
+    {
+        // You'll need to inject IFamilyGroupManager to get this working
+        // familyGroups = familyGroupManager.GetAllFamilyGroups();
+    }
+
+    private void HandleAuthMessage(object? sender, string message)
+    {
+        errorMessage = message;
+        StateHasChanged();
+    }
+
+    private async Task HandleRegister()
+    {
+        var result = await RegisterService.Register(registerModel.Username, registerModel.Password, registerModel.FamilyGroup);
+        if (result)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+
+    public class RegisterModel
+    {
+        [Required(ErrorMessage = "Username is required")]
+        public string Username { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Password is required")]
+        public string Password { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Family Group is required")]
+        public string FamilyGroup { get; set; } = string.Empty;
+    }
+} 

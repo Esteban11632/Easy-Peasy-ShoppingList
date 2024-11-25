@@ -1,4 +1,4 @@
-@page "/"
+@page "/shopping-list"
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Web
@@ -72,16 +72,16 @@
     private string selectedCategory = "";
 
     private IEnumerable<ShoppingItem> FilteredItems =>
-        string.IsNullOrEmpty(selectedCategory)
-            ? shoppingItems
-            : shoppingItems.Where(item => item.Category == selectedCategory);
+    string.IsNullOrEmpty(selectedCategory)
+    ? shoppingItems
+    : shoppingItems.Where(item => item.Category == selectedCategory);
 
     private void HandleAddItem(MouseEventArgs e)
     {
-        try 
+        try
         {
             string errorMessage = "";
-            
+
             if (string.IsNullOrWhiteSpace(newItem.Name))
             {
                 errorMessage += "Please enter an item name.\n";
@@ -106,12 +106,12 @@
             }
 
             var item = new ShoppingItem
-            {
-                Name = newItem.Name,
-                Category = newItem.Category,
-                Price = newItem.Price,
-                Quantity = newItem.Quantity
-            };
+                {
+                    Name = newItem.Name,
+                    Category = newItem.Category,
+                    Price = newItem.Price,
+                    Quantity = newItem.Quantity
+                };
 
             shoppingItems.Add(item);
             newItem = new ShoppingItem();
