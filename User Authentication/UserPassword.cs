@@ -43,7 +43,7 @@ namespace UserAuthentication
             }
         }
 
-        public bool Register(string username, string password, string FamilyGroup, bool isAdmin = false) // Resgiste the user in the files, need explicit true for admin to be admin
+        public async Task<bool> Register(string username, string password, string FamilyGroup, bool isAdmin = false) // Resgiste the user in the files, need explicit true for admin to be admin
         {
             if (!_validator.ValidateCredentials(username, password, FamilyGroup)) // Validate the credentials to register in the files
             {
@@ -57,9 +57,10 @@ namespace UserAuthentication
                 return false;
             }
 
-            if (!_familyGroupManager.FamilyGroupExists(FamilyGroup)) // Checks if the family group exists
+            // Only check for existing family group if the user is NOT an admin
+            if (!isAdmin && !_familyGroupManager.FamilyGroupExists(FamilyGroup))
             {
-                RaiseAuthenticationMessage("Invalid family group"); // Throws an authentication message of invalid family group
+                RaiseAuthenticationMessage("Invalid family group");
                 return false;
             }
 
@@ -106,7 +107,7 @@ namespace UserAuthentication
 
         public bool IsUserInFamilyGroup(string username, string familyGroup) // Checks if the user is in the family group
         {
-            return _userCredentials.ContainsKey(username) && 
+            return _userCredentials.ContainsKey(username) &&
                 _userCredentials[username].FamilyGroup == familyGroup; // Returns true if the user is in the family group
         }
 

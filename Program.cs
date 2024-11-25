@@ -1,14 +1,25 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Forms;
+using UserAuthentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add framework services
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor(options =>
 {
     options.DetailedErrors = builder.Environment.IsDevelopment();
     options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(3);
 });
+
+// Add your application services
+builder.Services.AddScoped<IUserValidator, UserValidator>();
+builder.Services.AddScoped<ICredentialStorage, FileCredentialStorage>();
+builder.Services.AddScoped<IFamilyGroupManager, FamilyGroupManager>();
+builder.Services.AddScoped<ILogin, UserPassword>();
+builder.Services.AddScoped<IRegister, UserPassword>();
+
 
 var app = builder.Build();
 

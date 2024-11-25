@@ -31,14 +31,14 @@ namespace UserAuthentication
             // Add the family group and set its admin
             _familyGroups.Add(newFamilyGroup); // Adds the family group
             _familyGroupAdmins[newFamilyGroup] = username; // Sets the admin for the family group
-            
+
             SaveFamilyGroups(); // Saves the family groups
             return true;
         }
 
         public bool IsFamilyGroupAdmin(string username, string familyGroup) // Checks if the user is the admin of the family group
         {
-            return _familyGroupAdmins.ContainsKey(familyGroup) && 
+            return _familyGroupAdmins.ContainsKey(familyGroup) &&
                    _familyGroupAdmins[familyGroup] == username; // Checks if the family group exists and if the user is the admin
         }
 
@@ -54,7 +54,7 @@ namespace UserAuthentication
 
         public string GetFamilyGroupAdmin(string familyGroup)
         {
-            return _familyGroupAdmins.ContainsKey(familyGroup) ? 
+            return _familyGroupAdmins.ContainsKey(familyGroup) ?
                    _familyGroupAdmins[familyGroup] : string.Empty; // Returns the admin of the family group
         }
 
@@ -65,12 +65,12 @@ namespace UserAuthentication
                 var (groups, admins) = _storage.LoadFamilyGroups();
                 _familyGroups.Clear(); // Clears the family groups
                 _familyGroupAdmins.Clear(); // Clears the family group admins
-                
+
                 foreach (var group in groups) // Adds the family groups
                 {
                     _familyGroups.Add(group); // Adds the family groups
                 }
-                
+
                 foreach (var admin in admins) // Adds the family group admins
                 {
                     _familyGroupAdmins[admin.Key] = admin.Value; // Adds the family group admins

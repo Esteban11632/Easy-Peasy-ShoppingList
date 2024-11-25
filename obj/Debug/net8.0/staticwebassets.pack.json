@@ -1,11 +1,15 @@
 {
   "Files": [
     {
-      "Id": "D:\\Programming\\SoftwareEngineering\\Easy-Peasy-ShoppingList\\wwwroot\\css\\shopping-list.css",
+      "Id": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\auth.css",
+      "PackagePath": "staticwebassets\\css\\auth.css"
+    },
+    {
+      "Id": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\shopping-list.css",
       "PackagePath": "staticwebassets\\css\\shopping-list.css"
     },
     {
-      "Id": "D:\\Programming\\SoftwareEngineering\\Easy-Peasy-ShoppingList\\wwwroot\\css\\site.css",
+      "Id": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
