@@ -15,8 +15,15 @@
 
 <div class="task-manager">
     <h3>Task Manager</h3>
+
     @if (isAuthenticated)
     {
+        <div>
+            <p><strong>Username:</strong> @username</p>
+            <p><strong>Admin Status:</strong> @(isAdmin ? "Admin" : "User")</p>
+            <p><strong>Family Group:</strong> @familyGroup</p>
+        </div>
+
         @if (isAdmin)
         {
             <h4>Create a New Task</h4>
@@ -80,15 +87,18 @@
     private bool isAdmin;
     private List<TodoTask> userTasks = new List<TodoTask>();
     private string errorMessage = string.Empty; // Error message for validation
+    private string username;
+    private string familyGroup;
 
     protected override async Task OnInitializedAsync()
     {
-        var username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+        username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
         isAuthenticated = !string.IsNullOrEmpty(username);
 
         if (isAuthenticated)
         {
             isAdmin = LoginService.IsAdmin(username);
+            familyGroup = LoginService.GetFamilyGroup(username); // Get the family group of the user
             LoadUserTasks(username);
         }
         else
@@ -99,7 +109,6 @@
 
     private void LoadUserTasks(string username)
     {
-        var familyGroup = LoginService.GetFamilyGroup(username);
         userTasks = TaskStorage.GetTasksByFamilyGroup(familyGroup)
         .Where(task => task.AssignedTo == username)
         .ToList();
