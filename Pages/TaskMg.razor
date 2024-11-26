@@ -51,11 +51,13 @@
                     </select>
                     <ValidationMessage For="@(() => newTask.AssignedTo)" />
                 </div>
+                @*
                 <div class="form-group">
                     <label for="familyGroup">Family Group:</label>
                     <InputText id="familyGroup" @bind-Value="newTask.FamilyGroup" class="form-control" />
                     <ValidationMessage For="@(() => newTask.FamilyGroup)" />
                 </div>
+                *@
                 <button type="submit" class="btn btn-primary">Create Task</button>
             </EditForm>
             @if (!string.IsNullOrEmpty(errorMessage))
@@ -127,13 +129,13 @@
         // Validate that all required fields are filled
         if (string.IsNullOrWhiteSpace(newTask.Title) ||
         string.IsNullOrWhiteSpace(newTask.Description) ||
-        string.IsNullOrWhiteSpace(newTask.AssignedTo) ||
-        string.IsNullOrWhiteSpace(newTask.FamilyGroup))
+        string.IsNullOrWhiteSpace(newTask.AssignedTo))
         {
             errorMessage = "All fields are required. Please fill in all the fields.";
             return; // Exit the method if validation fails
         }
 
+        newTask.FamilyGroup = familyGroup;
         // Check for "Unassigned" in Assign To and Family Group fields
         if (newTask.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase) ||
         newTask.FamilyGroup.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
