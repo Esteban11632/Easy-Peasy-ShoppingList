@@ -2,10 +2,10 @@ namespace TaskManager
 {
     public class TodoTask // Class for the task
     {
-        public string Title { get; } // Property for the title of the task
-        public string Description { get; } // Property for the description of the task
-        public string AssignedTo { get; private set; } // Property for the assigned to of the task
-        public string FamilyGroup { get; } // Property for the family group of the task
+        public string Title { get; set; } // Property for the title of the task
+        public string Description { get; set; } // Property for the description of the task
+        public string AssignedTo { get; set; } // Property for the assigned to of the task
+        public string FamilyGroup { get; set; } // Property for the family group of the task
 
         public TodoTask(string title, string description, string assignedTo = "Unassigned", string familyGroup = "Unassigned") // Constructor for the task
         {
@@ -20,4 +20,4 @@ namespace TaskManager
             AssignedTo = user ?? throw new ArgumentNullException(nameof(user)); // Assigned to of the task
         }
     }
-} 
+}

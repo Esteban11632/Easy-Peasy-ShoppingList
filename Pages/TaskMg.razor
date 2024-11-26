@@ -4,80 +4,82 @@
 @using UserAuthentication
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Components
-@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
 @inject ITaskStorage TaskStorage
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JSRuntime
 @inject ILogin LoginService
+@inject AdminTaskManager AdminTaskManager
 
-<h3>Task Manager</h3>
-
-@if (isAuthenticated)
-{
-    @if (isAdmin)
+<div class="task-manager">
+    <h3>Task Manager</h3>
+    @if (isAuthenticated)
     {
-        <h4>Create a New Task</h4>
-        <EditForm Model="newTask" OnValidSubmit="HandleCreateTask">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <InputText id="title" @bind-Value="newTask.Title" class="form-control" />
-                <ValidationMessage For="@(() => newTask.Title)" />
-            </div>
-
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <InputTextArea id="description" @bind-Value="newTask.Description" class="form-control" />
-                <ValidationMessage For="@(() => newTask.Description)" />
-            </div>
-
-            <div class="form-group">
-                <label for="assignedTo">Assign To:</label>
-                <InputText id="assignedTo" @bind-Value="newTask.AssignedTo" class="form-control" />
-                <ValidationMessage For="@(() => newTask.AssignedTo)" />
-            </div>
-
-            <div class="form-group">
-                <label for="familyGroup">Family Group:</label>
-                <InputText id="familyGroup" @bind-Value="newTask.FamilyGroup" class="form-control" />
-                <ValidationMessage For="@(() => newTask.FamilyGroup)" />
-            </div>
-
-            <button type="submit" class="btn btn-primary">Create Task</button>
-        </EditForm>
-    }
-
-    <h4>Your Tasks</h4>
-    <ul>
-        @if (userTasks.Any())
+        @if (isAdmin)
         {
-            foreach (var task in userTasks)
+            <h4>Create a New Task</h4>
+            <EditForm Model="newTask" OnValidSubmit="HandleCreateTask">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <InputText id="title" @bind-Value="newTask.Title" class="form-control" />
+                    <ValidationMessage For="@(() => newTask.Title)" />
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <InputTextArea id="description" @bind-Value="newTask.Description" class="form-control" />
+                    <ValidationMessage For="@(() => newTask.Description)" />
+                </div>
+                <div class="form-group">
+                    <label for="assignedTo">Assign To:</label>
+                    <InputText id="assignedTo" @bind-Value="newTask.AssignedTo" class="form-control" />
+                    <ValidationMessage For="@(() => newTask.AssignedTo)" />
+                </div>
+                <div class="form-group">
+                    <label for="familyGroup">Family Group:</label>
+                    <InputText id="familyGroup" @bind-Value="newTask.FamilyGroup" class="form-control" />
+                    <ValidationMessage For="@(() => newTask.FamilyGroup)" />
+                </div>
+                <button type="submit" class="btn btn-primary">Create Task</button>
+            </EditForm>
+            @if (!string.IsNullOrEmpty(errorMessage))
             {
-                <li>
-                    <strong>@task.Title</strong>: @task.Description
-                </li>
+                <div class="alert alert-danger">@errorMessage</div>
             }
         }
-        else
-        {
-            <li>No tasks assigned to you.</li>
-        }
-    </ul>
-}
-else
-{
-    <p>You must be logged in to view this page.</p>
-}
+
+        <h4>Your Tasks</h4>
+        <ul>
+            @if (userTasks.Any())
+            {
+                foreach (var task in userTasks)
+                {
+                    <li>
+                        <strong>@task.Title</strong>: @task.Description
+                    </li>
+                }
+            }
+            else
+            {
+                <li>No tasks assigned to you.</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>You must be logged in to view this page.</p>
+    }
+</div>
 
 @code {
     private TodoTask newTask = new TodoTask("", "");
     private bool isAuthenticated;
     private bool isAdmin;
     private List<TodoTask> userTasks = new List<TodoTask>();
+    private string errorMessage = string.Empty; // Error message for validation
 
     protected override async Task OnInitializedAsync()
     {
@@ -105,10 +107,29 @@ else
 
     private void HandleCreateTask()
     {
-        TaskStorage.SaveTasks(new Dictionary<string, TodoTask>
-{
-{ newTask.Title, newTask }
-});
+        // Validate that all required fields are filled
+        if (string.IsNullOrWhiteSpace(newTask.Title) ||
+        string.IsNullOrWhiteSpace(newTask.Description) ||
+        string.IsNullOrWhiteSpace(newTask.AssignedTo) ||
+        string.IsNullOrWhiteSpace(newTask.FamilyGroup))
+        {
+            errorMessage = "All fields are required. Please fill in all the fields.";
+            return; // Exit the method if validation fails
+        }
+
+        // Check for "Unassigned" in Assign To and Family Group fields
+        if (newTask.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase) ||
+        newTask.FamilyGroup.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+        {
+            errorMessage = "The 'Assign To' and 'Family Group' fields cannot contain the word 'Unassigned'.";
+            return; // Exit the method if validation fails
+        }
+
+        // Clear the error message if validation passes
+        errorMessage = string.Empty;
+
+        AdminTaskManager.CreateTask(newTask.Title, newTask.Description, newTask.AssignedTo, newTask.FamilyGroup);
+        LoadUserTasks(newTask.AssignedTo); // Reload user tasks after creating a new task
         newTask = new TodoTask("", ""); // Reset the form
     }
 }

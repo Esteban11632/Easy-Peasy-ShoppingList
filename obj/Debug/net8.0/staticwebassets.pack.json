@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\TaskManager.css",
+      "PackagePath": "staticwebassets\\css\\TaskManager.css"
+    },
+    {
       "Id": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\auth.css",
       "PackagePath": "staticwebassets\\css\\auth.css"
     },

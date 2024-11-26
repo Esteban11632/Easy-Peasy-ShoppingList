@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Forms;
 using UserAuthentication;
+using TaskManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,8 @@ builder.Services.AddScoped<ICredentialStorage, FileCredentialStorage>();
 builder.Services.AddScoped<IFamilyGroupManager, FamilyGroupManager>();
 builder.Services.AddScoped<ILogin, UserPassword>();
 builder.Services.AddScoped<IRegister, UserPassword>();
-
+builder.Services.AddScoped<ITaskStorage, FileTaskStorage>();
+builder.Services.AddScoped<AdminTaskManager>();
 
 var app = builder.Build();
 
