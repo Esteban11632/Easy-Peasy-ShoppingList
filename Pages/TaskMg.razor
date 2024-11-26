@@ -42,7 +42,13 @@
                 </div>
                 <div class="form-group">
                     <label for="assignedTo">Assign To:</label>
-                    <InputText id="assignedTo" @bind-Value="newTask.AssignedTo" class="form-control" />
+                    <select id="assignedTo" @bind="newTask.AssignedTo" class="form-control">
+                        <option value="">Select User</option>
+                        @foreach (var user in familyUsers)
+                        {
+                            <option value="@user">@user</option>
+                        }
+                    </select>
                     <ValidationMessage For="@(() => newTask.AssignedTo)" />
                 </div>
                 <div class="form-group">
@@ -89,6 +95,7 @@
     private string errorMessage = string.Empty; // Error message for validation
     private string username;
     private string familyGroup;
+    private List<string> familyUsers = new List<string>(); // List to hold family users
 
     protected override async Task OnInitializedAsync()
     {
@@ -99,6 +106,7 @@
         {
             isAdmin = LoginService.IsAdmin(username);
             familyGroup = LoginService.GetFamilyGroup(username); // Get the family group of the user
+            familyUsers = await LoginService.GetUsersInFamilyGroup(familyGroup); // Get users in the family group
             LoadUserTasks(username);
         }
         else

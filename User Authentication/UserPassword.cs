@@ -115,5 +115,23 @@ namespace UserAuthentication
         {
             return IsAdmin(username) && IsUserInFamilyGroup(username, familyGroup); // Returns true if the user is the admin of the family group
         }
+
+        public async Task<List<string>> GetUsersInFamilyGroup(string familyGroup)
+        {
+            // Create a list to hold the usernames of users in the specified family group
+            List<string> usersInFamilyGroup = new List<string>();
+
+            // Iterate through the user credentials to find users in the specified family group
+            foreach (var user in _userCredentials.Values)
+            {
+                if (user.FamilyGroup.Equals(familyGroup, StringComparison.OrdinalIgnoreCase))
+                {
+                    usersInFamilyGroup.Add(user.Username); // Add the username to the list
+                }
+            }
+
+            // Return the list of usernames
+            return await Task.FromResult(usersInFamilyGroup);
+        }
     }
 }
