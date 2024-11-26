@@ -15,6 +15,11 @@
             <button class="btn btn-danger" @onclick="HandleLogout">Logout</button>
         </div>
 
+        <div class="user-info">
+            <p>User: @currentUsername @(isAdmin ? "(Admin)" : "")</p>
+            <p>Family Group: @familyGroup</p>
+        </div>
+
         @if (isAdmin)
         {
             <div class="add-item-form">
@@ -87,6 +92,8 @@
     private string selectedCategory = "";
     private bool isAuthenticated;
     private bool isAdmin;
+    private string currentUsername = string.Empty;
+    private string familyGroup = string.Empty;
 
     private IEnumerable<ShoppingItem> FilteredItems =>
     string.IsNullOrEmpty(selectedCategory)
@@ -103,7 +110,9 @@
         }
         else
         {
+            currentUsername = username;
             isAdmin = LoginService.IsAdmin(username);
+            familyGroup = LoginService.GetFamilyGroup(username);
         }
     }
     private void HandleAddItem(MouseEventArgs e)

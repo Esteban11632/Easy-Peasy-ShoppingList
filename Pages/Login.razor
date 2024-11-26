@@ -61,6 +61,7 @@
         if (LoginService.Login(loginModel.Username, loginModel.Password))
         {
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "username", loginModel.Username);
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "isAuthenticated", "true");
             NavigationManager.NavigateTo("/shopping-list");
         }
     }
