@@ -9,39 +9,39 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Easy-Peasy-ShoppingList
 build_property.RootNamespace = Easy-Peasy-ShoppingList
-build_property.ProjectDir = C:\Users\jairo\OneDrive\Documentos\GitHub\Easy-Peasy-ShoppingList\
+build_property.ProjectDir = C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\jairo\OneDrive\Documentos\GitHub\Easy-Peasy-ShoppingList
+build_property.MSBuildProjectDirectory = C:\Users\DELL\Desktop\C#\Easy-Peasy-ShoppingList
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/jairo/OneDrive/Documentos/GitHub/Easy-Peasy-ShoppingList/Pages/Login.razor]
+[C:/Users/DELL/Desktop/C\#/Easy-Peasy-ShoppingList/Pages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/jairo/OneDrive/Documentos/GitHub/Easy-Peasy-ShoppingList/Pages/LoginRedirect.razor]
+[C:/Users/DELL/Desktop/C\#/Easy-Peasy-ShoppingList/Pages/LoginRedirect.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5SZWRpcmVjdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/jairo/OneDrive/Documentos/GitHub/Easy-Peasy-ShoppingList/Pages/Register.razor]
+[C:/Users/DELL/Desktop/C\#/Easy-Peasy-ShoppingList/Pages/Register.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/jairo/OneDrive/Documentos/GitHub/Easy-Peasy-ShoppingList/Pages/ShoppinList.razor]
+[C:/Users/DELL/Desktop/C\#/Easy-Peasy-ShoppingList/Pages/ShoppinList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hvcHBpbkxpc3QucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/jairo/OneDrive/Documentos/GitHub/Easy-Peasy-ShoppingList/Shared/App.razor]
+[C:/Users/DELL/Desktop/C\#/Easy-Peasy-ShoppingList/Shared/App.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFwcC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/jairo/OneDrive/Documentos/GitHub/Easy-Peasy-ShoppingList/Shared/MainLayout.razor]
+[C:/Users/DELL/Desktop/C\#/Easy-Peasy-ShoppingList/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/jairo/OneDrive/Documentos/GitHub/Easy-Peasy-ShoppingList/Pages/_Host.cshtml]
+[C:/Users/DELL/Desktop/C\#/Easy-Peasy-ShoppingList/Pages/_Host.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

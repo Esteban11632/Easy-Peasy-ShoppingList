@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace UserAuthentication
 {
@@ -9,11 +10,70 @@ namespace UserAuthentication
     {
         private readonly string _filePath; // Stores the file path for the credentials
         private readonly string _familyGroupsPath; // Stores the file path for the family groups
+        private readonly byte[] _encryptionKey;
 
         public FileCredentialStorage(string filePath = "credentials.txt", string familyGroupsPath = "familygroups.txt") // Constructor for the FileCredentialStorage class
         {
             _filePath = filePath; // Stores the file path for the credentials
             _familyGroupsPath = familyGroupsPath; // Stores the file path for the family groups
+            _encryptionKey = GetOrCreateEncryptionKey();
+        }
+
+        private byte[] GetOrCreateEncryptionKey()
+        {
+            // In production, this should be stored securely (e.g., Azure Key Vault)
+            using (var aes = Aes.Create())
+            {
+                return aes.Key;
+            }
+        }
+
+        private string EncryptData(string data)
+        {
+            using (var aes = Aes.Create())
+            {
+                aes.Key = _encryptionKey;
+                aes.GenerateIV();
+
+                using (var encryptor = aes.CreateEncryptor())
+                using (var msEncrypt = new MemoryStream())
+                {
+                    msEncrypt.Write(aes.IV, 0, aes.IV.Length);
+
+                    using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    using (var swEncrypt = new StreamWriter(csEncrypt))
+                    {
+                        swEncrypt.Write(data);
+                    }
+
+                    return Convert.ToBase64String(msEncrypt.ToArray());
+                }
+            }
+        }
+
+        private string DecryptData(string encryptedData)
+        {
+            byte[] fullCipher = Convert.FromBase64String(encryptedData);
+
+            using (var aes = Aes.Create())
+            {
+                byte[] iv = new byte[aes.IV.Length];
+                byte[] cipher = new byte[fullCipher.Length - iv.Length];
+
+                Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
+                Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, cipher.Length);
+
+                aes.Key = _encryptionKey;
+                aes.IV = iv;
+
+                using (var decryptor = aes.CreateDecryptor())
+                using (var msDecrypt = new MemoryStream(cipher))
+                using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                using (var srDecrypt = new StreamReader(csDecrypt))
+                {
+                    return srDecrypt.ReadToEnd();
+                }
+            }
         }
 
         public Dictionary<string, UserCredentials> LoadCredentials() // Loads the credentials
@@ -42,7 +102,7 @@ namespace UserAuthentication
 
         public void SaveCredentials(Dictionary<string, UserCredentials> credentials) // Saves the credentials
         {
-            var lines = credentials.Values.Select(user => $"{user.Username}|{user.Password}|{user.IsAdmin}|{user.FamilyGroup}").ToList(); // Converts the credentials to a list of lines
+            var lines = credentials.Values.Select(user => $"{user.Username}|{user.PasswordHash}|{user.IsAdmin}|{user.FamilyGroup}").ToList(); // Converts the credentials to a list of lines
             File.WriteAllLines(_filePath, lines); // Writes the lines to the file
         }
 
