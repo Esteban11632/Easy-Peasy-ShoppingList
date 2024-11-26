@@ -72,8 +72,10 @@
         }
 
         <button type="submit" class="btn btn-primary">Register</button>
-        <button type="button" class="btn btn-secondary" @onclick="NavigateToLogin">Back to Login</button>
     </EditForm>
+    <div class="mt-3">
+        <button type="button" class="btn btn-secondary" @onclick="NavigateToLogin">Back to Login</button>
+    </div>
 </div>
 
 @code {
@@ -121,9 +123,10 @@
         }
     }
 
-    private void NavigateToLogin()
+    private Task NavigateToLogin()
     {
-        NavigationManager.NavigateTo("/login");
+        NavigationManager.NavigateTo("/login", true);
+        return Task.CompletedTask;
     }
 
     public class RegisterModel
