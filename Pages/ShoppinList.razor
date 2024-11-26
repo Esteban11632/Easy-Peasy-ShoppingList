@@ -1,9 +1,11 @@
 @page "/shopping-list"
+@using UserAuthentication;
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Web
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
+@inject ILogin LoginService
 
 @if (isAuthenticated)
 {
@@ -13,20 +15,23 @@
             <button class="btn btn-danger" @onclick="HandleLogout">Logout</button>
         </div>
 
-        <div class="add-item-form">
-            <input @bind="newItem.Name" placeholder="Item name" />
-            <select @bind="newItem.Category">
-                <option value="">Select Category</option>
-                <option value="Groceries">Groceries</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Clothing">Clothing</option>
-                <option value="Home">Home & Garden</option>
-                <option value="Other">Other</option>
-            </select>
-            <input @bind="newItem.Price" type="number" step="0.01" placeholder="Price" />
-            <input @bind="newItem.Quantity" type="number" placeholder="Quantity" />
-            <button @onclick="HandleAddItem" class="btn btn-primary">Add Item</button>
-        </div>
+        @if (isAdmin)
+        {
+            <div class="add-item-form">
+                <input @bind="newItem.Name" placeholder="Item name" />
+                <select @bind="newItem.Category">
+                    <option value="">Select Category</option>
+                    <option value="Groceries">Groceries</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Home">Home & Garden</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input @bind="newItem.Price" type="number" step="0.01" placeholder="Price" />
+                <input @bind="newItem.Quantity" type="number" placeholder="Quantity" />
+                <button @onclick="HandleAddItem" class="btn btn-primary">Add Item</button>
+            </div>
+        }
 
         <div class="filter-section">
             <select @bind-value="selectedCategory" @bind-value:event="onchange" class="category-filter">
@@ -60,7 +65,10 @@
                         <td>@item.Quantity</td>
                         <td>@((item.Price * item.Quantity).ToString("C"))</td>
                         <td>
-                            <button @onclick="() => RemoveItem(item)" class="btn btn-danger">Remove</button>
+                            @if (isAdmin)
+                            {
+                                <button @onclick="() => RemoveItem(item)" class="btn btn-danger">Remove</button>
+                            }
                         </td>
                     </tr>
                 }
@@ -78,6 +86,7 @@
     private ShoppingItem newItem = new();
     private string selectedCategory = "";
     private bool isAuthenticated;
+    private bool isAdmin;
 
     private IEnumerable<ShoppingItem> FilteredItems =>
     string.IsNullOrEmpty(selectedCategory)
@@ -91,6 +100,10 @@
         if (!isAuthenticated)
         {
             NavigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            isAdmin = LoginService.IsAdmin(username);
         }
     }
     private void HandleAddItem(MouseEventArgs e)
