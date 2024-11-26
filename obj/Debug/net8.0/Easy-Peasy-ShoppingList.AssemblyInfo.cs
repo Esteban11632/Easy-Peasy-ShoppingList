@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Easy-Peasy-ShoppingList")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+71e794b0fd229b619ea6cf74a21d08f71cb1902e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c820ae3a77f66d6e6d8bb7c567d855af267692f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Easy-Peasy-ShoppingList")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Easy-Peasy-ShoppingList")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

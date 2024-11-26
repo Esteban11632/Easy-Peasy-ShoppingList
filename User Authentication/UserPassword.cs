@@ -9,7 +9,8 @@ namespace UserAuthentication
         private readonly IFamilyGroupManager _familyGroupManager; // Manages the family groups
         private Dictionary<string, UserCredentials> _userCredentials; // Stores the user credentials
         public event EventHandler<string>? OnAuthenticationMessage; // Event handler for the authentication message
-        public UserPassword(ICredentialStorage storage, IUserValidator validator, IFamilyGroupManager familyGroupManager) // Constructor for the UserPassword class
+
+        public UserPassword(ICredentialStorage storage, IUserValidator validator, IFamilyGroupManager familyGroupManager) // Constructor for the UserHandler class
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage)); // Stores the credentials
             _validator = validator ?? throw new ArgumentNullException(nameof(validator)); // Validates the credentials
@@ -43,7 +44,7 @@ namespace UserAuthentication
             }
         }
 
-        public async Task<bool> Register(string username, string password, string FamilyGroup, bool isAdmin = false) // Resgiste the user in the files, need explicit true for admin to be admin
+        public async Task<bool> Register(string username, string password, string FamilyGroup, bool isAdmin = false) // Register the user in the files
         {
             if (!_validator.ValidateCredentials(username, password, FamilyGroup)) // Validate the credentials to register in the files
             {
@@ -67,7 +68,7 @@ namespace UserAuthentication
             var newUser = new UserCredentials(username, password, isAdmin, FamilyGroup); // Creates a new user
             _userCredentials.Add(username, newUser); // Adds the new user to the dictionary
             SaveUser(); // Save credentials in the file
-            RaiseAuthenticationMessage($"Registration successful. User type: {(isAdmin ? "Admin" : "Regular User")}"); // Throw an authentication message that the save was succesfull
+            RaiseAuthenticationMessage($"Registration successful. User type: {(isAdmin ? "Admin" : "Regular User")}"); // Throw an authentication message that the save was successful
             return true;
         }
 
@@ -75,7 +76,7 @@ namespace UserAuthentication
         {
             if (!_userCredentials.ContainsKey(username)) // Check if the user is correct
             {
-                RaiseAuthenticationMessage("Invalid username"); // Throws a invalid username message authentication
+                RaiseAuthenticationMessage("Invalid username"); // Throws an invalid username message authentication
                 return false;
             }
 
