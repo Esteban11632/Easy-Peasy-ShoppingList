@@ -8,6 +8,8 @@ Make sure to download the latest version.
 
 After having everything installed, to run the application, follow these steps:
 
+Its also very important to note that if the application GitHub Desktop is installed, it makes the process a lot easier.
+
 1. **Clone the Repository**:
    Clone the repository to your local machine using the following command:
 
