@@ -1,0 +1,154 @@
+@page "/task-manager"
+@using Microsoft.AspNetCore.Components.Authorization
+@using TaskManager
+@using UserAuthentication
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@inject ITaskStorage TaskStorage
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
+@inject ILogin LoginService
+@inject AdminTaskManager AdminTaskManager
+
+<div class="task-manager">
+    <h3>Task Manager</h3>
+
+    @if (isAuthenticated)
+    {
+        <div>
+            <p><strong>Username:</strong> @username</p>
+            <p><strong>Admin Status:</strong> @(isAdmin ? "Admin" : "User")</p>
+            <p><strong>Family Group:</strong> @familyGroup</p>
+        </div>
+
+        @if (isAdmin)
+        {
+            <h4>Create a New Task</h4>
+            <EditForm Model="newTask" OnValidSubmit="HandleCreateTask">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <InputText id="title" @bind-Value="newTask.Title" class="form-control" />
+                    <ValidationMessage For="@(() => newTask.Title)" />
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <InputTextArea id="description" @bind-Value="newTask.Description" class="form-control" />
+                    <ValidationMessage For="@(() => newTask.Description)" />
+                </div>
+                <div class="form-group">
+                    <label for="assignedTo">Assign To:</label>
+                    <select id="assignedTo" @bind="newTask.AssignedTo" class="form-control">
+                        <option value="">Select User</option>
+                        @foreach (var user in familyUsers)
+                        {
+                            <option value="@user">@user</option>
+                        }
+                    </select>
+                    <ValidationMessage For="@(() => newTask.AssignedTo)" />
+                </div>
+                @*
+                <div class="form-group">
+                    <label for="familyGroup">Family Group:</label>
+                    <InputText id="familyGroup" @bind-Value="newTask.FamilyGroup" class="form-control" />
+                    <ValidationMessage For="@(() => newTask.FamilyGroup)" />
+                </div>
+                *@
+                <button type="submit" class="btn btn-primary">Create Task</button>
+            </EditForm>
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger">@errorMessage</div>
+            }
+        }
+
+        <h4>Your Tasks</h4>
+        <ul>
+            @if (userTasks.Any())
+            {
+                foreach (var task in userTasks)
+                {
+                    <li>
+                        <strong>@task.Title</strong>: @task.Description
+                    </li>
+                }
+            }
+            else
+            {
+                <li>No tasks assigned to you.</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>You must be logged in to view this page.</p>
+    }
+</div>
+
+@code {
+    private TodoTask newTask = new TodoTask("", "");
+    private bool isAuthenticated;
+    private bool isAdmin;
+    private List<TodoTask> userTasks = new List<TodoTask>();
+    private string errorMessage = string.Empty; // Error message for validation
+    private string username;
+    private string familyGroup;
+    private List<string> familyUsers = new List<string>(); // List to hold family users
+
+    protected override async Task OnInitializedAsync()
+    {
+        username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+        isAuthenticated = !string.IsNullOrEmpty(username);
+
+        if (isAuthenticated)
+        {
+            isAdmin = LoginService.IsAdmin(username);
+            familyGroup = LoginService.GetFamilyGroup(username); // Get the family group of the user
+            familyUsers = await LoginService.GetUsersInFamilyGroup(familyGroup); // Get users in the family group
+            LoadUserTasks(username);
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+
+    private void LoadUserTasks(string username)
+    {
+        userTasks = TaskStorage.GetTasksByFamilyGroup(familyGroup)
+        .Where(task => task.AssignedTo == username)
+        .ToList();
+    }
+
+    private void HandleCreateTask()
+    {
+        // Validate that all required fields are filled
+        if (string.IsNullOrWhiteSpace(newTask.Title) ||
+        string.IsNullOrWhiteSpace(newTask.Description) ||
+        string.IsNullOrWhiteSpace(newTask.AssignedTo))
+        {
+            errorMessage = "All fields are required. Please fill in all the fields.";
+            return; // Exit the method if validation fails
+        }
+
+        newTask.FamilyGroup = familyGroup;
+        // Check for "Unassigned" in Assign To and Family Group fields
+        if (newTask.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase) ||
+        newTask.FamilyGroup.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+        {
+            errorMessage = "The 'Assign To' and 'Family Group' fields cannot contain the word 'Unassigned'.";
+            return; // Exit the method if validation fails
+        }
+
+        // Clear the error message if validation passes
+        errorMessage = string.Empty;
+
+        AdminTaskManager.CreateTask(newTask.Title, newTask.Description, newTask.AssignedTo, newTask.FamilyGroup);
+        LoadUserTasks(newTask.AssignedTo); // Reload user tasks after creating a new task
+        newTask = new TodoTask("", ""); // Reset the form
+    }
+}

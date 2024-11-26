@@ -1,0 +1,7 @@
+Buy Medicine|Buy everything from number 1 to number 5 items thats on the list, when you are done, let me know|Adrian5|Quiros
+Buy Computer for Adrian|You know he wanted a gift, so might as well give it to him|Adrian2|Quiros
+Remember this|Buy medicine for yourself|BigBoss|Salazar
+Buy Medicine2|Try to man|BigBoss|Salazar
+BigBoss|cdcdcdcd|ok|Quiros
+damn|Hello|BigBoss|Quiros
+Hello|Buy Medicine fam|Adrian6|Quiros

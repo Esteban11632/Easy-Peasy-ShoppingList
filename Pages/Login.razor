@@ -37,7 +37,7 @@
     </EditForm>
 
     <div class="mt-3">
-        <button class="btn btn-secondary" @onclick="NavigateToRegister">Register New Account</button>
+        <button type="button" class="btn btn-secondary" @onclick="NavigateToRegister">Register New Account</button>
     </div>
 </div>
 
@@ -61,12 +61,14 @@
         if (LoginService.Login(loginModel.Username, loginModel.Password))
         {
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "username", loginModel.Username);
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "isAuthenticated", "true");
             NavigationManager.NavigateTo("/shopping-list");
         }
     }
 
     private void NavigateToRegister()
     {
+        Console.WriteLine("Navigating to Register");
         NavigationManager.NavigateTo("/register");
     }
 

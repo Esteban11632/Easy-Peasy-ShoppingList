@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ZBfOIM8JMcJAo1c7OsktHSJh115GGRfMbseM7D9V0DY=",
+  "Hash": "AiYHXbucc5NYmPdFxuyAni4a3l94+URwNX/PPrEEHCY=",
   "Source": "Easy-Peasy-ShoppingList",
   "BasePath": "_content/Easy-Peasy-ShoppingList",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\TaskManager.css",
+      "SourceId": "Easy-Peasy-ShoppingList",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\",
+      "BasePath": "_content/Easy-Peasy-ShoppingList",
+      "RelativePath": "css/TaskManager.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\TaskManager.css"
     }
   ]
 }
