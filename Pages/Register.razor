@@ -123,10 +123,10 @@
         }
     }
 
-    private Task NavigateToLogin()
+    private void NavigateToLogin()
     {
-        NavigationManager.NavigateTo("/login", true);
-        return Task.CompletedTask;
+        Console.WriteLine("Navigating to Login");
+        NavigationManager.NavigateTo("/login");
     }
 
     public class RegisterModel

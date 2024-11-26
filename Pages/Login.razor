@@ -28,9 +28,9 @@
 
         @if (!string.IsNullOrEmpty(errorMessage))
         {
-                    <div class="alert alert-danger">
+            <div class="alert alert-danger">
                 @errorMessage
-                    </div>
+            </div>
         }
 
         <button type="submit" class="btn btn-primary">Login</button>
@@ -66,10 +66,10 @@
         }
     }
 
-    private Task NavigateToRegister()
+    private void NavigateToRegister()
     {
-        NavigationManager.NavigateTo("/register", true);
-        return Task.CompletedTask;
+        Console.WriteLine("Navigating to Register");
+        NavigationManager.NavigateTo("/register");
     }
 
     public class LoginModel
