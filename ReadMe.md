@@ -2,6 +2,12 @@
 
 Before running the code, make sure you have Git installed on your machine. And have .NET SDK installed on your machine.
 
+To Check if you have .NET SDK installed, you can go to your terminal and run the following command:
+
+```
+dotnet --version
+```
+
 To download .NET SDK, you can go to this link: https://dotnet.microsoft.com/en-us/download
 
 Make sure to download the latest version.
@@ -21,7 +27,7 @@ Its also very important to note that if the application GitHub Desktop is instal
    Change your directory to the project folder:
 
    ```
-   cd ./Easy-Peasy-ShoppingList
+   cd Easy-Peasy-ShoppingList
    ```
 
 3. **Install Dependencies**:
