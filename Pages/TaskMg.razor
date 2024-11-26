@@ -99,7 +99,7 @@
 
     private void LoadUserTasks(string username)
     {
-        var familyGroup = "DefaultFamilyGroup"; // Replace with actual logic to get the user's family group
+        var familyGroup = LoginService.GetFamilyGroup(username);
         userTasks = TaskStorage.GetTasksByFamilyGroup(familyGroup)
         .Where(task => task.AssignedTo == username)
         .ToList();
