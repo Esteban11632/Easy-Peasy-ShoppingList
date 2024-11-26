@@ -3,79 +3,96 @@
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Web
 @inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 
-<div class="shopping-list-container">
-    <h3>Shopping List</h3>
+@if (isAuthenticated)
+{
+    <div class="shopping-list-container">
+        <div class="header-container">
+            <h3>Shopping List</h3>
+            <button class="btn btn-danger" @onclick="HandleLogout">Logout</button>
+        </div>
 
-    <div class="add-item-form">
-        <input @bind="newItem.Name" placeholder="Item name" />
-        <select @bind="newItem.Category">
-            <option value="">Select Category</option>
-            <option value="Groceries">Groceries</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Clothing">Clothing</option>
-            <option value="Home">Home & Garden</option>
-            <option value="Other">Other</option>
-        </select>
-        <input @bind="newItem.Price" type="number" step="0.01" placeholder="Price" />
-        <input @bind="newItem.Quantity" type="number" placeholder="Quantity" />
-        <button @onclick="HandleAddItem" class="btn btn-primary">Add Item</button>
-    </div>
+        <div class="add-item-form">
+            <input @bind="newItem.Name" placeholder="Item name" />
+            <select @bind="newItem.Category">
+                <option value="">Select Category</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Home">Home & Garden</option>
+                <option value="Other">Other</option>
+            </select>
+            <input @bind="newItem.Price" type="number" step="0.01" placeholder="Price" />
+            <input @bind="newItem.Quantity" type="number" placeholder="Quantity" />
+            <button @onclick="HandleAddItem" class="btn btn-primary">Add Item</button>
+        </div>
 
-    <div class="filter-section">
-        <select @bind-value="selectedCategory" @bind-value:event="onchange" class="category-filter">
-            <option value="">All Categories</option>
-            <option value="Groceries">Groceries</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Clothing">Clothing</option>
-            <option value="Home">Home & Garden</option>
-            <option value="Other">Other</option>
-        </select>
-    </div>
+        <div class="filter-section">
+            <select @bind-value="selectedCategory" @bind-value:event="onchange" class="category-filter">
+                <option value="">All Categories</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Home">Home & Garden</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in FilteredItems)
-            {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Category</td>
-                    <td>@item.Price.ToString("C")</td>
-                    <td>@item.Quantity</td>
-                    <td>@((item.Price * item.Quantity).ToString("C"))</td>
-                    <td>
-                        <button @onclick="() => RemoveItem(item)" class="btn btn-danger">Remove</button>
-                    </td>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in FilteredItems)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Category</td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@((item.Price * item.Quantity).ToString("C"))</td>
+                        <td>
+                            <button @onclick="() => RemoveItem(item)" class="btn btn-danger">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-    <div class="total">
-        <h4>Total: @(FilteredItems.Sum(i => i.Price * i.Quantity).ToString("C"))</h4>
+        <div class="total">
+            <h4>Total: @(FilteredItems.Sum(i => i.Price * i.Quantity).ToString("C"))</h4>
+        </div>
     </div>
-</div>
+}
 
 @code {
     private List<ShoppingItem> shoppingItems = new();
     private ShoppingItem newItem = new();
     private string selectedCategory = "";
+    private bool isAuthenticated;
 
     private IEnumerable<ShoppingItem> FilteredItems =>
     string.IsNullOrEmpty(selectedCategory)
     ? shoppingItems
     : shoppingItems.Where(item => item.Category == selectedCategory);
 
+    protected override async Task OnInitializedAsync()
+    {
+        var username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+        isAuthenticated = !string.IsNullOrEmpty(username);
+        if (!isAuthenticated)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
     private void HandleAddItem(MouseEventArgs e)
     {
         try
@@ -135,5 +152,12 @@
         public string Category { get; set; } = "";
         public decimal Price { get; set; }
         public int Quantity { get; set; } = 1;
+    }
+
+    private async Task HandleLogout()
+    {
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
+        NavigationManager.NavigateTo("/login");
     }
 }
