@@ -61,3 +61,15 @@ Its also very important to note that if the application GitHub Desktop is instal
 
 6. **Access the Application**:
    Open your web browser and navigate to `http://localhost:5000`
+
+Lastly, because the buttons to redirect the user to another page are not working, the main way you can change between pages is manually copy the URL and paste it into your browser.
+
+This is the URL for the login page: `http://localhost:5000/login`
+
+This is the URL for the register page: `http://localhost:5000/register`
+
+Also to note, these last two pages cannot be accessed unless you are logged in.
+
+This is the URL for the shopping list page: `http://localhost:5000/shopping-list`
+
+This is the URL for the task manager page: `http://localhost:5000/task-manager`
