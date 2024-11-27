@@ -1,5 +1,7 @@
 # Instructions to run the code
 
+First of all, if you have GitHub Desktop installed, it makes the process a lot easier, but it is not required to run the code.
+
 Before running the code, make sure you have Git installed on your machine. And have .NET SDK installed on your machine.
 
 To Check if you have Git installed, you can go to your terminal and run the following command:
