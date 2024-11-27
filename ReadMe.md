@@ -2,6 +2,12 @@
 
 Before running the code, make sure you have Git installed on your machine. And have .NET SDK installed on your machine.
 
+To Check if you have Git installed, you can go to your terminal and run the following command:
+
+```
+git --version
+```
+
 To Check if you have .NET SDK installed, you can go to your terminal and run the following command:
 
 ```
