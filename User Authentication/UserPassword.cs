@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 
 namespace UserAuthentication
 {
@@ -8,14 +9,19 @@ namespace UserAuthentication
         private readonly IUserValidator _validator; // Validates the credentials
         private readonly IFamilyGroupManager _familyGroupManager; // Manages the family groups
         private Dictionary<string, UserCredentials> _userCredentials; // Stores the user credentials
+        private readonly LoginAttemptManager _attemptManager;
+        private readonly SessionManager _sessionManager;
+        private readonly SecurityAuditLogger _auditLogger;
         public event EventHandler<string>? OnAuthenticationMessage; // Event handler for the authentication message
-
-        public UserPassword(ICredentialStorage storage, IUserValidator validator, IFamilyGroupManager familyGroupManager) // Constructor for the UserHandler class
+        public UserPassword(ICredentialStorage storage, IUserValidator validator, IFamilyGroupManager familyGroupManager) // Constructor for the UserPassword class
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage)); // Stores the credentials
             _validator = validator ?? throw new ArgumentNullException(nameof(validator)); // Validates the credentials
             _familyGroupManager = familyGroupManager ?? throw new ArgumentNullException(nameof(familyGroupManager)); // Manages the family groups
             _userCredentials = new Dictionary<string, UserCredentials>(); // Stores the user credentials
+            _attemptManager = new LoginAttemptManager();
+            _sessionManager = new SessionManager();
+            _auditLogger = new SecurityAuditLogger();
             LoadUser(); // Loads the user credentials
         }
 
@@ -32,63 +38,98 @@ namespace UserAuthentication
             }
         }
 
-        public void SaveUser() // Save user credentials in file
+        public async Task SaveUser()
         {
             try
             {
-                _storage.SaveCredentials(_userCredentials); // Store the credentials
+                await Task.Run(() => _storage.SaveCredentials(_userCredentials));
             }
-            catch (Exception ex) // Exception
+            catch (Exception ex)
             {
-                throw new Exception($"Error saving credentials: {ex.Message}"); // Error in saving the credentials
+                throw new SecurityException($"Error saving credentials: {ex.Message}", ex);
             }
         }
 
-        public async Task<bool> Register(string username, string password, string FamilyGroup, bool isAdmin = false) // Register the user in the files
+        public async Task<bool> Register(string username, string password, string FamilyGroup, bool isAdmin = false)
         {
-            if (!_validator.ValidateCredentials(username, password, FamilyGroup)) // Validate the credentials to register in the files
+            try
             {
-                RaiseAuthenticationMessage("Invalid credentials format"); // If they are invalid, throw an authentication message
-                return false;
-            }
+                if (!_validator.ValidateCredentials(username, password, FamilyGroup))
+                {
+                    RaiseAuthenticationMessage("Invalid credentials format");
+                    return false;
+                }
 
-            if (_userCredentials.ContainsKey(username)) // Checks if the user already exists
+                if (_userCredentials.ContainsKey(username))
+                {
+                    RaiseAuthenticationMessage("Username already exists");
+                    return false;
+                }
+
+                if (!isAdmin && !_familyGroupManager.FamilyGroupExists(FamilyGroup))
+                {
+                    RaiseAuthenticationMessage("Invalid family group");
+                    return false;
+                }
+
+                var newUser = new UserCredentials(username, password, isAdmin, FamilyGroup);
+                _userCredentials.Add(username, newUser);
+                
+                await Task.Run(() => SaveUser());
+                
+                _auditLogger.LogSecurityEvent(username, "REGISTRATION", $"User registered in {FamilyGroup} group", true);
+                RaiseAuthenticationMessage($"Registration successful. User type: {(isAdmin ? "Admin" : "Regular User")}");
+                return true;
+            }
+            catch (Exception ex)
             {
-                RaiseAuthenticationMessage("Username already exists"); // Throw an authentication message that the user already exists
-                return false;
+                _auditLogger.LogSecurityEvent(username, "REGISTRATION_ERROR", ex.Message, false);
+                throw new SecurityException("An error occurred during registration", ex);
             }
-
-            // Only check for existing family group if the user is NOT an admin
-            if (!isAdmin && !_familyGroupManager.FamilyGroupExists(FamilyGroup))
-            {
-                RaiseAuthenticationMessage("Invalid family group");
-                return false;
-            }
-
-            var newUser = new UserCredentials(username, password, isAdmin, FamilyGroup); // Creates a new user
-            _userCredentials.Add(username, newUser); // Adds the new user to the dictionary
-            SaveUser(); // Save credentials in the file
-            RaiseAuthenticationMessage($"Registration successful. User type: {(isAdmin ? "Admin" : "Regular User")}"); // Throw an authentication message that the save was successful
-            return true;
         }
 
         public bool Login(string username, string password) // Makes the user login to their account
         {
-            if (!_userCredentials.ContainsKey(username)) // Check if the user is correct
+            try
             {
-                RaiseAuthenticationMessage("Invalid username"); // Throws an invalid username message authentication
-                return false;
-            }
+                if (_attemptManager.IsLockedOut(username))
+                {
+                    RaiseAuthenticationMessage("Account is temporarily locked");
+                    _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Account locked", false);
+                    return false;
+                }
 
-            var userInfo = _userCredentials[username]; // Puts the user name in userInfo
-            if (password != userInfo.Password) // Checks the input password in the userInfo password key
+                if (!_userCredentials.ContainsKey(username))
+                {
+                    _attemptManager.RecordAttempt(username, false);
+                    _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Invalid username", false);
+                    RaiseAuthenticationMessage("Invalid credentials");
+                    return false;
+                }
+
+                var userInfo = _userCredentials[username];
+                var hashedPassword = HashPassword(password, userInfo.Salt);
+                
+                if (hashedPassword != userInfo.PasswordHash)
+                {
+                    _attemptManager.RecordAttempt(username, false);
+                    _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Invalid password", false);
+                    RaiseAuthenticationMessage("Invalid credentials");
+                    return false;
+                }
+
+                _attemptManager.RecordAttempt(username, true);
+                var sessionId = _sessionManager.CreateSession(username, userInfo.FamilyGroup, userInfo.IsAdmin);
+                _auditLogger.LogSecurityEvent(username, "LOGIN_SUCCESS", $"Session: {sessionId}", true);
+                
+                RaiseAuthenticationMessage($"Login successful. User type: {(userInfo.IsAdmin ? "Admin" : "Regular User")} in {userInfo.FamilyGroup} group");
+                return true;
+            }
+            catch (Exception ex)
             {
-                RaiseAuthenticationMessage("Invalid password"); // Throws an authentication message of invalid password
-                return false;
+                _auditLogger.LogSecurityEvent(username, "LOGIN_ERROR", ex.Message, false);
+                throw new SecurityException("An error occurred during login", ex);
             }
-
-            RaiseAuthenticationMessage($"Login successful. User type: {(userInfo.IsAdmin ? "Admin" : "Regular User")} " + $"in {userInfo.FamilyGroup} group"); // Throws an authentication message of login successful
-            return true;
         }
 
         public bool IsAdmin(string username) // Checks if the user is an admin
@@ -117,22 +158,18 @@ namespace UserAuthentication
             return IsAdmin(username) && IsUserInFamilyGroup(username, familyGroup); // Returns true if the user is the admin of the family group
         }
 
-        public async Task<List<string>> GetUsersInFamilyGroup(string familyGroup)
+        private string HashPassword(string password, string salt)
         {
-            // Create a list to hold the usernames of users in the specified family group
-            List<string> usersInFamilyGroup = new List<string>();
-
-            // Iterate through the user credentials to find users in the specified family group
-            foreach (var user in _userCredentials.Values)
+            byte[] saltBytes = Convert.FromBase64String(salt);
+            using (var pbkdf2 = new Rfc2898DeriveBytes(
+                password,
+                saltBytes,
+                350000, // Same iteration count as in UserCredentials
+                HashAlgorithmName.SHA256))
             {
-                if (user.FamilyGroup.Equals(familyGroup, StringComparison.OrdinalIgnoreCase))
-                {
-                    usersInFamilyGroup.Add(user.Username); // Add the username to the list
-                }
+                byte[] hash = pbkdf2.GetBytes(32);
+                return Convert.ToBase64String(hash);
             }
-
-            // Return the list of usernames
-            return await Task.FromResult(usersInFamilyGroup);
         }
     }
 }
