@@ -1,9 +1,10 @@
 namespace UserAuthentication
 {
-    public interface ILogin // Interface for logging in a user
+    public interface ILogin
     {
-        void LoadUser(); // Method to load the user credentials
-        bool Login(string username, string password); // Method to login the user
-        bool IsAdmin(string username); // Method to check if the user is an admin
+        Task<bool> Login(string username, string password);
+        bool IsAdmin(string username);
+        string GetFamilyGroup(string username);
+        Task<List<string>> GetUsersInFamilyGroup(string familyGroup);
     }
 }

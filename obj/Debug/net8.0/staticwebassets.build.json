@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "AiYHXbucc5NYmPdFxuyAni4a3l94+URwNX/PPrEEHCY=",
+  "Hash": "SMa+JrtvVu7DUBiZZsoWh/eED2U39wLX4WNbkEcByXQ=",
   "Source": "Easy-Peasy-ShoppingList",
   "BasePath": "_content/Easy-Peasy-ShoppingList",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "Easy-Peasy-ShoppingList\\wwwroot",
       "Source": "Easy-Peasy-ShoppingList",
-      "ContentRoot": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\DELL\\Desktop\\C#\\Easy-Peasy-ShoppingList\\wwwroot\\",
       "BasePath": "_content/Easy-Peasy-ShoppingList",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\auth.css",
+      "Identity": "C:\\Users\\DELL\\Desktop\\C#\\Easy-Peasy-ShoppingList\\wwwroot\\css\\auth.css",
       "SourceId": "Easy-Peasy-ShoppingList",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\DELL\\Desktop\\C#\\Easy-Peasy-ShoppingList\\wwwroot\\",
       "BasePath": "_content/Easy-Peasy-ShoppingList",
       "RelativePath": "css/auth.css",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\css\\auth.css"
     },
     {
-      "Identity": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\shopping-list.css",
+      "Identity": "C:\\Users\\DELL\\Desktop\\C#\\Easy-Peasy-ShoppingList\\wwwroot\\css\\shopping-list.css",
       "SourceId": "Easy-Peasy-ShoppingList",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\DELL\\Desktop\\C#\\Easy-Peasy-ShoppingList\\wwwroot\\",
       "BasePath": "_content/Easy-Peasy-ShoppingList",
       "RelativePath": "css/shopping-list.css",
       "AssetKind": "All",
@@ -55,10 +55,10 @@
       "OriginalItemSpec": "wwwroot\\css\\shopping-list.css"
     },
     {
-      "Identity": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\site.css",
+      "Identity": "C:\\Users\\DELL\\Desktop\\C#\\Easy-Peasy-ShoppingList\\wwwroot\\css\\site.css",
       "SourceId": "Easy-Peasy-ShoppingList",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\DELL\\Desktop\\C#\\Easy-Peasy-ShoppingList\\wwwroot\\",
       "BasePath": "_content/Easy-Peasy-ShoppingList",
       "RelativePath": "css/site.css",
       "AssetKind": "All",
@@ -74,10 +74,10 @@
       "OriginalItemSpec": "wwwroot\\css\\site.css"
     },
     {
-      "Identity": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\css\\TaskManager.css",
+      "Identity": "C:\\Users\\DELL\\Desktop\\C#\\Easy-Peasy-ShoppingList\\wwwroot\\css\\TaskManager.css",
       "SourceId": "Easy-Peasy-ShoppingList",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jairo\\OneDrive\\Documentos\\GitHub\\Easy-Peasy-ShoppingList\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\DELL\\Desktop\\C#\\Easy-Peasy-ShoppingList\\wwwroot\\",
       "BasePath": "_content/Easy-Peasy-ShoppingList",
       "RelativePath": "css/TaskManager.css",
       "AssetKind": "All",

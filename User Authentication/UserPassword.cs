@@ -88,46 +88,46 @@ namespace UserAuthentication
             }
         }
 
-        public bool Login(string username, string password) // Makes the user login to their account
+        public async Task<bool> Login(string username, string password)
         {
             try
             {
                 if (_attemptManager.IsLockedOut(username))
                 {
                     RaiseAuthenticationMessage("Account is temporarily locked");
-                    _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Account locked", false);
+                    await Task.Run(() => _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Account locked", false));
                     return false;
                 }
 
                 if (!_userCredentials.ContainsKey(username))
                 {
                     _attemptManager.RecordAttempt(username, false);
-                    _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Invalid username", false);
+                    await Task.Run(() => _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Invalid username", false));
                     RaiseAuthenticationMessage("Invalid credentials");
                     return false;
                 }
 
                 var userInfo = _userCredentials[username];
-                var hashedPassword = HashPassword(password, userInfo.Salt);
+                var hashedPassword = await Task.Run(() => HashPassword(password, userInfo.Salt));
                 
                 if (hashedPassword != userInfo.PasswordHash)
                 {
                     _attemptManager.RecordAttempt(username, false);
-                    _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Invalid password", false);
+                    await Task.Run(() => _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Invalid password", false));
                     RaiseAuthenticationMessage("Invalid credentials");
                     return false;
                 }
 
                 _attemptManager.RecordAttempt(username, true);
-                var sessionId = _sessionManager.CreateSession(username, userInfo.FamilyGroup, userInfo.IsAdmin);
-                _auditLogger.LogSecurityEvent(username, "LOGIN_SUCCESS", $"Session: {sessionId}", true);
+                var sessionId = await Task.Run(() => _sessionManager.CreateSession(username, userInfo.FamilyGroup, userInfo.IsAdmin));
+                await Task.Run(() => _auditLogger.LogSecurityEvent(username, "LOGIN_SUCCESS", $"Session: {sessionId}", true));
                 
                 RaiseAuthenticationMessage($"Login successful. User type: {(userInfo.IsAdmin ? "Admin" : "Regular User")} in {userInfo.FamilyGroup} group");
                 return true;
             }
             catch (Exception ex)
             {
-                _auditLogger.LogSecurityEvent(username, "LOGIN_ERROR", ex.Message, false);
+                await Task.Run(() => _auditLogger.LogSecurityEvent(username, "LOGIN_ERROR", ex.Message, false));
                 throw new SecurityException("An error occurred during login", ex);
             }
         }
@@ -170,6 +170,16 @@ namespace UserAuthentication
                 byte[] hash = pbkdf2.GetBytes(32);
                 return Convert.ToBase64String(hash);
             }
+        }
+
+        public async Task<List<string>> GetUsersInFamilyGroup(string familyGroup)
+        {
+            return await Task.Run(() => 
+                _userCredentials
+                    .Where(u => u.Value.FamilyGroup == familyGroup)
+                    .Select(u => u.Key)
+                    .ToList()
+            );
         }
     }
 }

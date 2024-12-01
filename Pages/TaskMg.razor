@@ -95,8 +95,8 @@
     private bool isAdmin;
     private List<TodoTask> userTasks = new List<TodoTask>();
     private string errorMessage = string.Empty; // Error message for validation
-    private string username;
-    private string familyGroup;
+    private string? username;
+    private string? familyGroup;
     private List<string> familyUsers = new List<string>(); // List to hold family users
 
     protected override async Task OnInitializedAsync()
@@ -107,8 +107,8 @@
         if (isAuthenticated)
         {
             isAdmin = LoginService.IsAdmin(username);
-            familyGroup = LoginService.GetFamilyGroup(username); // Get the family group of the user
-            familyUsers = await LoginService.GetUsersInFamilyGroup(familyGroup); // Get users in the family group
+            familyGroup = LoginService.GetFamilyGroup(username); // This one is not async
+            familyUsers = await LoginService.GetUsersInFamilyGroup(familyGroup); // Add await here
             LoadUserTasks(username);
         }
         else
@@ -119,6 +119,11 @@
 
     private void LoadUserTasks(string username)
     {
+        if (string.IsNullOrEmpty(familyGroup))
+        {
+            userTasks = new List<TodoTask>();
+            return;
+        }
         userTasks = TaskStorage.GetTasksByFamilyGroup(familyGroup)
         .Where(task => task.AssignedTo == username)
         .ToList();
@@ -126,6 +131,11 @@
 
     private void HandleCreateTask()
     {
+        if (string.IsNullOrEmpty(familyGroup))
+        {
+            errorMessage = "Family group is not set. Please contact your administrator.";
+            return;
+        }
         // Validate that all required fields are filled
         if (string.IsNullOrWhiteSpace(newTask.Title) ||
         string.IsNullOrWhiteSpace(newTask.Description) ||

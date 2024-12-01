@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Forms;
 using UserAuthentication;
 using TaskManager;
+using Microsoft.EntityFrameworkCore;
+using Easy_Peasy_ShoppingList.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +18,15 @@ builder.Services.AddServerSideBlazor(options =>
 
 // Add your application services
 builder.Services.AddScoped<IUserValidator, UserValidator>();
-builder.Services.AddScoped<ICredentialStorage, FileCredentialStorage>();
+builder.Services.AddScoped<ICredentialStorage, DatabaseCredentialStorage>();
 builder.Services.AddScoped<IFamilyGroupManager, FamilyGroupManager>();
 builder.Services.AddScoped<ILogin, UserPassword>();
 builder.Services.AddScoped<IRegister, UserPassword>();
 builder.Services.AddScoped<ITaskStorage, FileTaskStorage>();
 builder.Services.AddScoped<AdminTaskManager>();
+
+builder.Services.AddDbContext<ShoppingListDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

@@ -58,11 +58,30 @@
 
     private async Task HandleLogin()
     {
-        if (LoginService.Login(loginModel.Username, loginModel.Password))
+        if (string.IsNullOrWhiteSpace(loginModel.Username) || string.IsNullOrWhiteSpace(loginModel.Password))
         {
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "username", loginModel.Username);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "isAuthenticated", "true");
-            NavigationManager.NavigateTo("/shopping-list");
+            errorMessage = "Please enter both username and password.";
+            return;
+        }
+
+        try
+        {
+            bool isSuccess = await LoginService.Login(loginModel.Username, loginModel.Password);
+            
+            if (isSuccess)
+            {
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "username", loginModel.Username);
+                NavigationManager.NavigateTo("/shopping-list");
+            }
+            else
+            {
+                errorMessage = "Invalid username or password.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred during login.";
+            Console.WriteLine($"Login error: {ex.Message}");
         }
     }
 
