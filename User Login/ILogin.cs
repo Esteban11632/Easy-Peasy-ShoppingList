@@ -2,10 +2,8 @@ namespace UserAuthentication
 {
     public interface ILogin
     {
-        event EventHandler<string> OnAuthenticationMessage;
-        Task<bool> Login(string username, string password);
-        bool IsAdmin(string username);
-        string GetFamilyGroup(string username);
-        Task<List<string>> GetUsersInFamilyGroup(string familyGroup);
+        event EventHandler<string> OnAuthenticationMessage; // Event handler for the authentication message
+        Task<bool> Login(string username, string password); // Method to login
+        bool IsAdmin(string username); // Method to check if the user is an admin
     }
 }

@@ -22,13 +22,13 @@ namespace UserAuthentication
             IsAdmin = isAdmin; // Stores if the user is an admin
         }
 
-        public UserCredentials(string username, string passwordHash, string salt, bool isAdmin, string familyGroup)
+        public UserCredentials(string username, string passwordHash, string salt, bool isAdmin, string familyGroup) // Constructor for the UserCredentials class
         {
-            Username = username ?? throw new ArgumentNullException(nameof(username));
-            PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
-            Salt = salt ?? throw new ArgumentNullException(nameof(salt));
-            FamilyGroup = familyGroup ?? throw new ArgumentNullException(nameof(familyGroup));
-            IsAdmin = isAdmin;
+            Username = username ?? throw new ArgumentNullException(nameof(username)); // Stores the username
+            PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash)); // Stores the hashed password
+            Salt = salt ?? throw new ArgumentNullException(nameof(salt)); // Stores the salt
+            FamilyGroup = familyGroup ?? throw new ArgumentNullException(nameof(familyGroup)); // Stores the family group
+            IsAdmin = isAdmin; // Stores if the user is an admin
         }
 
         private string GenerateSalt() // Generates a salt
@@ -41,11 +41,11 @@ namespace UserAuthentication
         private string HashPassword(string password, string salt) // Hashes the password
         {
             byte[] saltBytes = Convert.FromBase64String(salt); // Converts the salt to a byte array
-            using (var pbkdf2 = new Rfc2898DeriveBytes(
-                password,
-                saltBytes,
-                Iterations,
-                HashAlgorithmName.SHA256)) // Creates a new Rfc2898DeriveBytes object with the password, salt, iterations, and hash algorithm name
+            using (var pbkdf2 = new Rfc2898DeriveBytes( // Creates a new Rfc2898DeriveBytes object
+                password, // password
+                saltBytes, // salt
+                Iterations, // iterations
+                HashAlgorithmName.SHA256)) // hash algorithm name
             {
                 byte[] hash = pbkdf2.GetBytes(32); // Gets the hashed password as a byte array
                 return Convert.ToBase64String(hash); // Converts the byte array to a base64 string and returns it
