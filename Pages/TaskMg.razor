@@ -11,6 +11,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JSRuntime
 @inject ILogin LoginService
+@inject IFamily FamilyService
 @inject AdminTaskManager AdminTaskManager
 
 <div class="task-manager">
@@ -107,8 +108,8 @@
         if (isAuthenticated)
         {
             isAdmin = LoginService.IsAdmin(username);
-            familyGroup = LoginService.GetFamilyGroup(username); // This one is not async
-            familyUsers = await LoginService.GetUsersInFamilyGroup(familyGroup); // Add await here
+            familyGroup = FamilyService.GetFamilyGroup(username); // This one is not async
+            familyUsers = await FamilyService.GetUsersInFamilyGroup(familyGroup); // Add await here
             LoadUserTasks(username);
         }
         else

@@ -72,7 +72,8 @@
             if (isSuccess)
             {
                 await JSRuntime.InvokeVoidAsync("localStorage.setItem", "username", loginModel.Username);
-                NavigationManager.NavigateTo("/shopping-list");
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "isAuthenticated", "true");
+                NavigationManager.NavigateTo("/shopping-list", true);
             }
             else
             {

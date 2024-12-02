@@ -49,3 +49,14 @@
 {"Timestamp":"2024-12-02T03:52:58.4300642Z","Username":"Pablito","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-02T04:03:03.3300256Z","Username":"Pablito","EventType":"REGISTRATION","Details":"User registered in Duarte Family group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-02T04:03:21.9528475Z","Username":"Pablito","EventType":"LOGIN_SUCCESS","Details":"Session: bI6Jto05gkqdNBSCWfv2Bw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:03:49.7014798Z","Username":"Pablito","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:04:56.8849201Z","Username":"Esteban","EventType":"REGISTRATION","Details":"User registered in Murillo Family group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:05:00.1434301Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: GyPwaNcsJkOHjfVDwKOh5A==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:06:39.4614906Z","Username":"Neymar","EventType":"REGISTRATION","Details":"User registered in Murillo Family group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:06:42.4150122Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: Fehrpf3FYk2fKOnlA\u002BWPkw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:12:03.5731215Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: Rmbej7EuOEOCyezRCh6xpg==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:12:48.2860594Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: T0OhQiCw7kOwdxX\u002BSu9Vqw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:13:43.0663008Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: ZXqbm0D/H0aaX33joq3iRw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:14:15.6192353Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: FxVWQieoWkiipsRb1ay29A==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:18:45.7338657Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: 2QPEH08PYUajmXRjh\u002BGI2g==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T05:18:52.9720519Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: bx/NQ4lzTkuEVWVLjU0zXQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}

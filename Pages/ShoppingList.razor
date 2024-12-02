@@ -6,6 +6,7 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject ILogin LoginService
+@inject IFamily FamilyService
 
 @if (isAuthenticated)
 {
@@ -112,7 +113,7 @@
         {
             currentUsername = username;
             isAdmin = LoginService.IsAdmin(username);
-            familyGroup = LoginService.GetFamilyGroup(username);
+            familyGroup = FamilyService.GetFamilyGroup(username);
         }
     }
     private void HandleAddItem(MouseEventArgs e)
