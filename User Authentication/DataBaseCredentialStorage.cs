@@ -34,7 +34,8 @@ namespace UserAuthentication
             {
                 var userCred = new UserCredentials(
                     user.Username,
-                    user.PasswordHash, // Note: Password is already hashed in the database
+                    user.PasswordHash,
+                    user.Salt,
                     user.IsAdmin,
                     user.FamilyGroup
                 );

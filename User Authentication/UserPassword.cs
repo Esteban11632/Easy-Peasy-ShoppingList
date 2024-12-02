@@ -75,7 +75,7 @@ namespace UserAuthentication
                 var newUser = new UserCredentials(username, password, isAdmin, FamilyGroup);
                 _userCredentials.Add(username, newUser);
                 
-                await Task.Run(() => SaveUser());
+                await SaveUser();
                 
                 _auditLogger.LogSecurityEvent(username, "REGISTRATION", $"User registered in {FamilyGroup} group", true);
                 RaiseAuthenticationMessage($"Registration successful. User type: {(isAdmin ? "Admin" : "Regular User")}");
@@ -92,8 +92,11 @@ namespace UserAuthentication
         {
             try
             {
+                Console.WriteLine($"Login attempt for user: {username}");
+                
                 if (_attemptManager.IsLockedOut(username))
                 {
+                    Console.WriteLine("Account is locked");
                     RaiseAuthenticationMessage("Account is temporarily locked");
                     await Task.Run(() => _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Account locked", false));
                     return false;
@@ -101,6 +104,7 @@ namespace UserAuthentication
 
                 if (!_userCredentials.ContainsKey(username))
                 {
+                    Console.WriteLine($"User not found: {username}");
                     _attemptManager.RecordAttempt(username, false);
                     await Task.Run(() => _auditLogger.LogSecurityEvent(username, "LOGIN_ATTEMPT", "Invalid username", false));
                     RaiseAuthenticationMessage("Invalid credentials");
@@ -108,7 +112,12 @@ namespace UserAuthentication
                 }
 
                 var userInfo = _userCredentials[username];
+                Console.WriteLine($"Found user. Family Group: {userInfo.FamilyGroup}");
+                Console.WriteLine($"Stored Hash: {userInfo.PasswordHash}");
+                Console.WriteLine($"Stored Salt: {userInfo.Salt}");
+                
                 var hashedPassword = await Task.Run(() => HashPassword(password, userInfo.Salt));
+                Console.WriteLine($"Computed Hash: {hashedPassword}");
                 
                 if (hashedPassword != userInfo.PasswordHash)
                 {

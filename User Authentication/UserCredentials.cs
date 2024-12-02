@@ -22,6 +22,15 @@ namespace UserAuthentication
             IsAdmin = isAdmin; // Stores if the user is an admin
         }
 
+        public UserCredentials(string username, string passwordHash, string salt, bool isAdmin, string familyGroup)
+        {
+            Username = username ?? throw new ArgumentNullException(nameof(username));
+            PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
+            Salt = salt ?? throw new ArgumentNullException(nameof(salt));
+            FamilyGroup = familyGroup ?? throw new ArgumentNullException(nameof(familyGroup));
+            IsAdmin = isAdmin;
+        }
+
         private string GenerateSalt() // Generates a salt
         {
             byte[] salt = new byte[32]; // Creates a byte array with a length of 32

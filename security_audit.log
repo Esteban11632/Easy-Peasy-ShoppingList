@@ -1,0 +1,27 @@
+{"Timestamp":"2024-12-01T21:34:24.3573357Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:34:29.0962351Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:35.8644398Z","Username":"Esteban11632","EventType":"REGISTRATION","Details":"User registered in Murillo Family group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:40.9731945Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:46.1264726Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:48.192531Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:48.9985362Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:49.2558725Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:49.3611511Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Account locked","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:49.5869972Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Account locked","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:50.1313116Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Account locked","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:50.353283Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Account locked","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:50.7269169Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Account locked","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:35:51.493165Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Account locked","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:36:16.3072574Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:40:45.667043Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:43:40.3971346Z","Username":"AdrianQS","EventType":"REGISTRATION","Details":"User registered in Murillo Family group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:43:46.1177136Z","Username":"AdrianQS","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:43:47.4895567Z","Username":"AdrianQS","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:43:52.7057014Z","Username":"AdrianQS","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:43:55.0850664Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:43:56.3487532Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:43:56.5316135Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:43:56.6369647Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-01T21:43:56.8014323Z","Username":"Esteban11632","EventType":"LOGIN_ATTEMPT","Details":"Invalid password","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T01:17:00.152789Z","Username":"AdrianQS","EventType":"LOGIN_SUCCESS","Details":"Session: V9bm7w\u002B5wES9uyBKbAjSbw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T01:17:04.8853222Z","Username":"AdrianQS","EventType":"LOGIN_SUCCESS","Details":"Session: 4sHEij5D8kakzPdLCF0BQQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
