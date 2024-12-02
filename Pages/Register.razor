@@ -85,7 +85,7 @@
 
     protected override void OnInitialized()
     {
-        var userPassword = (UserPassword)RegisterService;
+        var userPassword = (RegisterManager)RegisterService;
         userPassword.OnAuthenticationMessage += HandleAuthMessage;
         LoadFamilyGroups();
     }
@@ -103,21 +103,11 @@
 
     private async Task HandleRegister()
     {
-        if (registerModel.IsAdmin)
-        {
-            // Create new family group for admin
-            if (!FamilyGroupManager.CreateFamilyGroup(registerModel.Username, registerModel.FamilyGroup))
-            {
-                errorMessage = "Failed to create family group. It might already exist.";
-                return;
-            }
-        }
-
-        if (await RegisterService.Register(
-        registerModel.Username,
-        registerModel.Password,
-        registerModel.FamilyGroup,
-        registerModel.IsAdmin))
+        if (await RegisterService.Register( // register service
+        registerModel.Username, // username
+        registerModel.Password, // password
+        registerModel.FamilyGroup, // family group
+        registerModel.IsAdmin)) // is admin
         {
             NavigationManager.NavigateTo("/login");
         }

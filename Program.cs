@@ -20,8 +20,8 @@ builder.Services.AddServerSideBlazor(options =>
 builder.Services.AddScoped<IUserValidator, UserValidator>();
 builder.Services.AddScoped<ICredentialStorage, DatabaseCredentialStorage>();
 builder.Services.AddScoped<IFamilyGroupManager, FamilyGroupManager>();
-builder.Services.AddScoped<ILogin, UserPassword>();
-builder.Services.AddScoped<IRegister, UserPassword>();
+builder.Services.AddScoped<ILogin, LoginManager>();
+builder.Services.AddScoped<IRegister, RegisterManager>();
 builder.Services.AddScoped<ITaskStorage, FileTaskStorage>();
 builder.Services.AddScoped<AdminTaskManager>();
 

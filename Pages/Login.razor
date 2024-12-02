@@ -4,7 +4,8 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.JSInterop
-@inject ILogin LoginService
+@inject ILogin LoginManager
+@inject IRegister RegisterManager
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
@@ -47,7 +48,7 @@
 
     protected override void OnInitialized()
     {
-        ((UserPassword)LoginService).OnAuthenticationMessage += HandleAuthMessage;
+        ((LoginManager)LoginManager).OnAuthenticationMessage += HandleAuthMessage;
     }
 
     private void HandleAuthMessage(object? sender, string message)
@@ -66,7 +67,7 @@
 
         try
         {
-            bool isSuccess = await LoginService.Login(loginModel.Username, loginModel.Password);
+            bool isSuccess = await LoginManager.Login(loginModel.Username, loginModel.Password);
             
             if (isSuccess)
             {

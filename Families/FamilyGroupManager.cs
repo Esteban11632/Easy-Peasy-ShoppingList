@@ -11,8 +11,8 @@ namespace UserAuthentication
         {
             _userValidator = userValidator ?? throw new ArgumentNullException(nameof(userValidator)); // Validates the user
             _storage = storage ?? throw new ArgumentNullException(nameof(storage)); // Stores the credentials
-            _familyGroups = new HashSet<string>(); // Stores the family groups
-            _familyGroupAdmins = new Dictionary<string, string>(); // Stores family group and its admin
+            _familyGroups = new HashSet<string>(StringComparer.OrdinalIgnoreCase); // Make case-insensitive
+            _familyGroupAdmins = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase); // Make case-insensitive
             LoadFamilyGroups(); // Loads the family groups
         }
 
@@ -20,20 +20,41 @@ namespace UserAuthentication
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(newFamilyGroup)) // Checks if the username or family group is null or empty
             {
+                Console.WriteLine($"Invalid input - Username: {username}, FamilyGroup: {newFamilyGroup}");
                 return false;
             }
 
-            if (_familyGroups.Contains(newFamilyGroup)) // Checks if the family group already exists
+            lock (_familyGroups) // Add thread safety
             {
-                return false;
+                Console.WriteLine($"Attempting to create family group: {newFamilyGroup}");
+                Console.WriteLine($"Current family groups: {string.Join(", ", _familyGroups)}");
+
+                // If family group already exists, return false
+                if (_familyGroups.Contains(newFamilyGroup))
+                {
+                    Console.WriteLine($"Family group already exists: {newFamilyGroup}");
+                    return false;
+                }
+
+                // Create new family group with admin
+                _familyGroups.Add(newFamilyGroup);
+                _familyGroupAdmins[newFamilyGroup] = username;
+                
+                try
+                {
+                    SaveFamilyGroups();
+                    Console.WriteLine($"Successfully created family group: {newFamilyGroup} with admin: {username}");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error saving family group: {ex.Message}");
+                    // Rollback changes if save fails
+                    _familyGroups.Remove(newFamilyGroup);
+                    _familyGroupAdmins.Remove(newFamilyGroup);
+                    throw;
+                }
             }
-
-            // Add the family group and set its admin
-            _familyGroups.Add(newFamilyGroup); // Adds the family group
-            _familyGroupAdmins[newFamilyGroup] = username; // Sets the admin for the family group
-
-            SaveFamilyGroups(); // Saves the family groups
-            return true;
         }
 
         public bool IsFamilyGroupAdmin(string username, string familyGroup) // Checks if the user is the admin of the family group
@@ -44,7 +65,9 @@ namespace UserAuthentication
 
         public bool FamilyGroupExists(string familyGroup)
         {
-            return _familyGroups.Contains(familyGroup); // Checks if the family group exists
+            var exists = _familyGroups.Contains(familyGroup);
+            Console.WriteLine($"Checking if family group exists: {familyGroup} - Result: {exists}");
+            return exists;
         }
 
         public IEnumerable<string> GetAllFamilyGroups()
@@ -62,6 +85,7 @@ namespace UserAuthentication
         {
             try
             {
+                Console.WriteLine("Loading family groups...");
                 var (groups, admins) = _storage.LoadFamilyGroups();
                 _familyGroups.Clear(); // Clears the family groups
                 _familyGroupAdmins.Clear(); // Clears the family group admins
@@ -75,10 +99,14 @@ namespace UserAuthentication
                 {
                     _familyGroupAdmins[admin.Key] = admin.Value; // Adds the family group admins
                 }
+
+                Console.WriteLine($"Loaded family groups: {string.Join(", ", _familyGroups)}");
+                Console.WriteLine($"Loaded admins: {string.Join(", ", _familyGroupAdmins.Select(x => $"{x.Key}:{x.Value}"))}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error loading family groups: {ex.Message}"); // Throws an exception if there is an error loading the family groups
+                Console.WriteLine($"Error loading family groups: {ex.Message}");
+                throw new Exception($"Error loading family groups: {ex.Message}");
             }
         }
 
