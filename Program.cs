@@ -20,7 +20,11 @@ builder.Services.AddServerSideBlazor(options =>
 builder.Services.AddScoped<IUserValidator, UserValidator>();
 builder.Services.AddScoped<ICredentialStorage, DatabaseCredentialStorage>();
 builder.Services.AddScoped<IFamilyGroupManager, FamilyGroupManager>();
-builder.Services.AddScoped<IFamily, LoginManager>();  // Or however you've implemented it
+builder.Services.AddScoped<IFamily>(provider => {
+    var credentialStorage = provider.GetRequiredService<ICredentialStorage>();
+    var userCredentials = credentialStorage.LoadCredentials();
+    return new GetFamilies(userCredentials);
+});
 builder.Services.AddScoped<ILogin, LoginManager>();
 builder.Services.AddScoped<IRegister, RegisterManager>();
 builder.Services.AddScoped<ITaskStorage, FileTaskStorage>();

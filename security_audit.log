@@ -61,3 +61,6 @@
 {"Timestamp":"2024-12-02T05:18:45.7338657Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: 2QPEH08PYUajmXRjh\u002BGI2g==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-02T05:18:52.9720519Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: bx/NQ4lzTkuEVWVLjU0zXQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-02T05:27:26.2360805Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: Lh02Njoe5U6jlPfzFEDiLA==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T15:54:23.486462Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: O4/cwJm030iDsxKqmq/ctA==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T15:54:55.1853826Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: afRWEicDbEaUSFKDk46\u002B8w==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-02T16:06:28.5862981Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: eyOX3mxrUUaPGI4\u002BrGiv/g==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}

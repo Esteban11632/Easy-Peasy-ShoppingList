@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UserAuthentication
 {
-    public class LoginManager : ILogin, IFamily // Implements the ILogin and IFamily interfaces
+    public class LoginManager : ILogin // Implements the ILogin interface
     {
         private readonly ICredentialStorage _storage; // Stores the credentials
         private Dictionary<string, UserCredentials> _userCredentials; // Stores the user credentials
@@ -106,21 +106,6 @@ namespace UserAuthentication
         public bool IsAdmin(string username) // Checks if the user is an admin
         {
             return _userCredentials.ContainsKey(username) && _userCredentials[username].IsAdmin; // Returns true if the user is an admin
-        }
-
-        public string GetFamilyGroup(string username) // Gets the family group of the user
-        {
-            return _userCredentials.ContainsKey(username) ? _userCredentials[username].FamilyGroup : string.Empty; // Returns the family group of the user
-        }
-
-        public async Task<List<string>> GetUsersInFamilyGroup(string familyGroup) // Gets the users in the family group
-        {
-            return await Task.Run(() =>
-                _userCredentials // Gets the users in the family group
-                    .Where(u => u.Value.FamilyGroup == familyGroup) // Filters the users in the family group
-                    .Select(u => u.Key) // Selects the keys of the users in the family group
-                    .ToList() // Converts the users in the family group to a list
-            );
         }
     }
 }
