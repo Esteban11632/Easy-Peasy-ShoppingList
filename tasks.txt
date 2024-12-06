@@ -4,4 +4,4 @@ Remember this|Buy medicine for yourself|BigBoss|Salazar
 Buy Medicine2|Try to man|BigBoss|Salazar
 BigBoss|cdcdcdcd|ok|Quiros
 damn|Hello|BigBoss|Quiros
-Hello|Buy Medicine fam|Adrian6|Quiros
+Hello|dede|Adrian|Quiros
