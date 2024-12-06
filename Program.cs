@@ -31,7 +31,7 @@ builder.Services.AddScoped<ITaskStorage, FileTaskStorage>();
 builder.Services.AddScoped<AdminTaskManager>();
 
 builder.Services.AddDbContext<ShoppingListDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

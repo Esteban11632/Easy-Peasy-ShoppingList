@@ -74,7 +74,6 @@ namespace UserAuthentication
                 var sessionId = await Task.Run(() => _sessionManager.CreateSession(username, userInfo.FamilyGroup, userInfo.IsAdmin)); // Creates the session
                 await Task.Run(() => _auditLogger.LogSecurityEvent(username, "LOGIN_SUCCESS", $"Session: {sessionId}", true)); // Logs the login success
                 
-                RaiseAuthenticationMessage($"Login successful. User type: {(userInfo.IsAdmin ? "Admin" : "Regular User")} in {userInfo.FamilyGroup} group"); // Logs the login successful
                 return true; // Returns true if the login is successful
             }
             catch (Exception ex)
