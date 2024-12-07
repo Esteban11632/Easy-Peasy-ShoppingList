@@ -122,3 +122,14 @@
 {"Timestamp":"2024-12-06T06:34:56.7142705Z","Username":"Adrian","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-06T06:34:59.1609226Z","Username":"Adrian10","EventType":"LOGIN_SUCCESS","Details":"Session: CIbKjFu090eD/zeSg7400Q==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-06T06:35:07.8343052Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: XwccWfNj106XJ3fMDBZPTw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:03:49.2156896Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: Y\u002BhGc9Zy0U\u002BxF3sC9X/6Nw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:04:08.2937725Z","Username":"SYSTEM","EventType":"SecurityException","Details":"Message: Password must contain uppercase, lowercase, numbers, and special characters, Inner Exception: None","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:04:11.7855667Z","Username":"Adrian3","EventType":"REGISTRATION","Details":"User registered in Gaucho Family group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:04:14.492725Z","Username":"Adrian3","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:04:16.9213286Z","Username":"Adrian3","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:05:00.3375892Z","Username":"Adrian3","EventType":"LOGIN_SUCCESS","Details":"Session: M7al\u002BkF68ESUNmPscGewAw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:18:18.5588179Z","Username":"Adrian5","EventType":"REGISTRATION","Details":"User registered in Quiros group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:18:21.363163Z","Username":"Adrian5","EventType":"LOGIN_SUCCESS","Details":"Session: PAuIWIRvWUG/lZxC6oR2pw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:19:58.4716794Z","Username":"Adrian5","EventType":"LOGIN_SUCCESS","Details":"Session: uBJS0ZGmB0qLJpqGRkDIHQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:32:09.1222986Z","Username":"Adrian5","EventType":"LOGIN_SUCCESS","Details":"Session: TQ2ypPFtIEmcaJUoFaS/xw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-06T23:33:36.7632981Z","Username":"Adrian5","EventType":"LOGIN_SUCCESS","Details":"Session: 34FCHpqPSEmvBzekfbVjlQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}

@@ -109,7 +109,7 @@
         registerModel.FamilyGroup, // family group
         registerModel.IsAdmin)) // is admin
         {
-            NavigationManager.NavigateTo("/login");
+            NavigationManager.NavigateTo("/login", forceLoad: true);
         }
     }
 

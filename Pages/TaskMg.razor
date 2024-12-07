@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
+@using Shared NavigationButtons
 @inject ITaskStorage TaskStorage
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -13,12 +14,15 @@
 @inject ILogin LoginService
 @inject IFamily FamilyService
 @inject AdminTaskManager AdminTaskManager
+@inject NavigationButtons NavigationButtons
 
 <div class="task-manager">
     <h3>Task Manager</h3>
 
     @if (isAuthenticated)
     {
+        <NavigationButtons /> <!-- Include Navigation Buttons Here -->
+
         <div>
             <p><strong>Username:</strong> @username</p>
             <p><strong>Admin Status:</strong> @(isAdmin ? "Admin" : "User")</p>

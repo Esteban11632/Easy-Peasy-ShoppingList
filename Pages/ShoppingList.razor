@@ -3,13 +3,17 @@
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Web
+@using Shared NavigationButtons
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject ILogin LoginService
 @inject IFamily FamilyService
+@inject NavigationButtons NavigationButtons
 
 @if (isAuthenticated)
 {
+    <NavigationButtons /> <!-- Include Navigation Buttons Here -->
+
     <div class="shopping-list-container">
         <div class="header-container">
             <h3>Shopping List</h3>
