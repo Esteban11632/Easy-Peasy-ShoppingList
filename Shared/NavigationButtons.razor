@@ -1,6 +1,19 @@
 @using Microsoft.AspNetCore.Components
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 
 <div class="navigation-buttons">
     <a href="/shopping-list" class="btn-navigation">Shopping List</a>
     <a href="/task-manager" class="btn-navigation">Task Manager</a>
+    <button class="btn btn-danger" @onclick="HandleLogout">Logout</button>
 </div>
+
+@code {
+    private async Task HandleLogout()
+    {
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
+        NavigationManager.NavigateTo("/login");
+    }
+}

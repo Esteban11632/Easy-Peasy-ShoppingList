@@ -147,3 +147,11 @@
 {"Timestamp":"2024-12-07T19:28:32.4088719Z","Username":"SYSTEM","EventType":"SecurityException","Details":"Message: Password must contain uppercase, lowercase, numbers, and special characters, Inner Exception: None","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-07T19:28:35.7692919Z","Username":"Adrian7","EventType":"REGISTRATION","Details":"User registered in Salazar group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-07T19:28:38.8658525Z","Username":"Adrian7","EventType":"LOGIN_SUCCESS","Details":"Session: /mrM3RsjJ02Y8KCkkcQl9Q==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-07T23:05:20.8159337Z","Username":"Adrian7","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-07T23:05:27.3154195Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: \u002BtQ0/6j/406M6bJpUX8bJw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-07T23:40:27.2909384Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: sjM/Mw2iskaD77wrXEWlxA==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-07T23:40:53.5271923Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: HaIjyHHObk6Idp5hI5Z0ow==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-07T23:42:08.7420889Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: CKz1qCl27Emwuk3KvckjUA==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-07T23:43:34.6507784Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: KJkwBU\u002BBLEGvrt8UAIGBbw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-07T23:44:36.2824891Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: pwM5W4eqAUK\u002BAn45GUcwSw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-07T23:49:35.0447392Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: kdKMeypMPUWJmubk\u002B9m48w==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
