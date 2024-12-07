@@ -1,19 +1,6 @@
 @using Microsoft.AspNetCore.Components
-@inject NavigationManager NavigationManager
 
 <div class="navigation-buttons">
-    <button class="btn-navigation" @onclick="NavigateToShoppingList">Shopping List</button>
-    <button class="btn-navigation" @onclick="NavigateToTaskManager">Task Manager</button>
+    <a href="/shopping-list" class="btn-navigation">Shopping List</a>
+    <a href="/task-manager" class="btn-navigation">Task Manager</a>
 </div>
-
-@code {
-    private void NavigateToShoppingList()
-    {
-        NavigationManager.NavigateTo("/shopping-list");
-    }
-
-    private void NavigateToTaskManager()
-    {
-        NavigationManager.NavigateTo("/task-manager");
-    }
-}

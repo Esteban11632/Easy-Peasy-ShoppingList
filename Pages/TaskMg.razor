@@ -6,7 +6,7 @@
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
-@using Shared NavigationButtons
+@using Easy_Peasy_ShoppingList.Shared
 @inject ITaskStorage TaskStorage
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -14,14 +14,13 @@
 @inject ILogin LoginService
 @inject IFamily FamilyService
 @inject AdminTaskManager AdminTaskManager
-@inject NavigationButtons NavigationButtons
 
-<div class="task-manager">
-    <h3>Task Manager</h3>
+@if (isAuthenticated)
+{
+    <NavigationButtons /> <!-- Include Navigation Buttons Here -->
 
-    @if (isAuthenticated)
-    {
-        <NavigationButtons /> <!-- Include Navigation Buttons Here -->
+    <div class="task-manager">
+        <h3>Task Manager</h3>
 
         <div>
             <p><strong>Username:</strong> @username</p>
@@ -87,12 +86,15 @@
                 <li>No tasks assigned to you.</li>
             }
         </ul>
-    }
-    else
-    {
+    </div>
+}
+else
+{
+    <div class="task-manager">
+        <h3>Task Manager</h3>
         <p>You must be logged in to view this page.</p>
-    }
-</div>
+    </div>
+}
 
 @code {
     private TodoTask newTask = new TodoTask("", "");
