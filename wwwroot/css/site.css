@@ -67,18 +67,20 @@ main {
   padding: 20px;
   position: fixed; 
   top: 20px;
-  left: 50%;
-  /* transform: translateX(-50%); */
+  right: 20px;
   background-color: var(--background-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  /* z-index: 1000; Ensures the navigation stays above other elements */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
 }
 
-.btn-navigation {
+.navigation-buttons .btn-navigation {
+  padding: 10px 15px; 
   background-color: #87939c; 
   color: white;
-  padding: 10px 15px; 
   border: none; 
   border-radius: 4px; 
   cursor: pointer; 
@@ -86,9 +88,21 @@ main {
   text-decoration: none; 
   display: inline-block; 
   transition: background-color 0.3s; 
-  margin-top: 10px;
 }
 
-.btn-navigation:hover {
+.navigation-buttons .btn-navigation:hover {
   background-color: #0f4c75; 
+}
+
+.btn-navigation {
+  padding: 10px 15px; 
+  background-color: #87939c; 
+  color: white;
+  border: none; 
+  border-radius: 4px; 
+  cursor: pointer; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block; 
+  transition: background-color 0.3s; 
 }
