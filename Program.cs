@@ -5,6 +5,7 @@ using UserAuthentication;
 using TaskManager;
 using Microsoft.EntityFrameworkCore;
 using Easy_Peasy_ShoppingList.Data;
+using Easy_Peasy_ShoppingList.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,8 @@ builder.Services.AddServerSideBlazor(options =>
 builder.Services.AddScoped<IUserValidator, UserValidator>();
 builder.Services.AddScoped<ICredentialStorage, DatabaseCredentialStorage>();
 builder.Services.AddScoped<IFamilyGroupManager, FamilyGroupManager>();
-builder.Services.AddScoped<IFamily>(provider => {
+builder.Services.AddScoped<IFamily>(provider =>
+{
     var credentialStorage = provider.GetRequiredService<ICredentialStorage>();
     var userCredentials = credentialStorage.LoadCredentials();
     return new GetFamilies(userCredentials);
@@ -29,6 +31,7 @@ builder.Services.AddScoped<ILogin, LoginManager>();
 builder.Services.AddScoped<IRegister, RegisterManager>();
 builder.Services.AddScoped<ITaskStorage, FileTaskStorage>();
 builder.Services.AddScoped<AdminTaskManager>();
+builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
 
 builder.Services.AddDbContext<ShoppingListDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -47,3 +50,5 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+
+

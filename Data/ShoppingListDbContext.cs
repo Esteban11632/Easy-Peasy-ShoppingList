@@ -8,6 +8,8 @@ namespace Easy_Peasy_ShoppingList.Data
         public DbSet<UserCredentialEntity> UserCredentials => Set<UserCredentialEntity>();
         public DbSet<FamilyGroupEntity> FamilyGroups => Set<FamilyGroupEntity>();
 
+        public DbSet<ShoppingItem> ShoppingItems { get; set; } = null!;
+
         public ShoppingListDbContext(DbContextOptions<ShoppingListDbContext> options)
             : base(options)
         {
@@ -24,6 +26,9 @@ namespace Easy_Peasy_ShoppingList.Data
             modelBuilder.Entity<UserCredentialEntity>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
+
+            modelBuilder.Entity<ShoppingItem>()
+                .HasIndex(s => s.FamilyGroup);
         }
     }
 }

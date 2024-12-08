@@ -4,6 +4,9 @@
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Web
 @using Easy_Peasy_ShoppingList.Shared
+@using Easy_Peasy_ShoppingList.Models
+@using Easy_Peasy_ShoppingList.Services
+@inject IShoppingListService ShoppingListService
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject ILogin LoginService
@@ -20,7 +23,7 @@
         </div>
 
         <div class="user-info">
-            <p>User: @currentUsername @(isAdmin ? "(Admin)" : "")</p>
+            <p>User: @username @(isAdmin ? "(Admin)" : "")</p>
             <p>Family Group: @familyGroup</p>
         </div>
 
@@ -36,154 +39,115 @@
                     <option value="Home">Home & Garden</option>
                     <option value="Other">Other</option>
                 </select>
-                <input @bind="newItem.Price" type="number" step="0.01" placeholder="Price" />
-                <input @bind="newItem.Quantity" type="number" placeholder="Quantity" />
-                <button @onclick="HandleAddItem" class="btn btn-primary">Add Item</button>
+                <input type="number" @bind="newItem.Price" placeholder="Price" min="0" step="0.01" />
+                <input type="number" @bind="newItem.Quantity" placeholder="Quantity" min="1" />
+                <button class="btn btn-primary" @onclick="AddItem">Add Item</button>
             </div>
         }
 
-        <div class="filter-section">
-            <select @bind-value="selectedCategory" @bind-value:event="onchange" class="category-filter">
-                <option value="">All Categories</option>
-                <option value="Groceries">Groceries</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Clothing">Clothing</option>
-                <option value="Home">Home & Garden</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in FilteredItems)
-                {
-                    <tr>
-                        <td>@item.Name</td>
-                        <td>@item.Category</td>
-                        <td>@item.Price.ToString("C")</td>
-                        <td>@item.Quantity</td>
-                        <td>@((item.Price * item.Quantity).ToString("C"))</td>
-                        <td>
-                            @if (isAdmin)
-                            {
-                                <button @onclick="() => RemoveItem(item)" class="btn btn-danger">Remove</button>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <div class="total">
-            <h4>Total: @(FilteredItems.Sum(i => i.Price * i.Quantity).ToString("C"))</h4>
-        </div>
+        <ul class="shopping-list">
+            @foreach (var item in shoppingItems)
+            {
+                <li>
+                    <span>@item.Name (@item.Category) - @item.Price.ToString("C") x @item.Quantity</span>
+                    @if (isAdmin)
+                    {
+                        <button class="btn btn-danger btn-sm" @onclick="() => RemoveItem(item)">Remove</button>
+                    }
+                </li>
+            }
+        </ul>
     </div>
+}
+else
+{
+    <p>Redirecting to login...</p>
 }
 
 @code {
-    private List<ShoppingItem> shoppingItems = new();
-    private ShoppingItem newItem = new();
-    private string selectedCategory = "";
+    private List<ShoppingItem> shoppingItems = new List<ShoppingItem>();
     private bool isAuthenticated;
     private bool isAdmin;
-    private string currentUsername = string.Empty;
-    private string familyGroup = string.Empty;
-
-    private IEnumerable<ShoppingItem> FilteredItems =>
-    string.IsNullOrEmpty(selectedCategory)
-    ? shoppingItems
-    : shoppingItems.Where(item => item.Category == selectedCategory);
+    private string? username;
+    private string? familyGroup;
+    private ShoppingItem newItem = new ShoppingItem();
 
     protected override async Task OnInitializedAsync()
     {
-        var username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+        username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
         isAuthenticated = !string.IsNullOrEmpty(username);
-        if (!isAuthenticated)
+
+        if (isAuthenticated)
         {
-            NavigationManager.NavigateTo("/login");
-        }
-        else
-        {
-            currentUsername = username;
             isAdmin = LoginService.IsAdmin(username);
             familyGroup = FamilyService.GetFamilyGroup(username);
-        }
-    }
-    private void HandleAddItem(MouseEventArgs e)
-    {
-        try
-        {
-            string errorMessage = "";
 
-            if (string.IsNullOrWhiteSpace(newItem.Name))
+            if (string.IsNullOrEmpty(familyGroup))
             {
-                errorMessage += "Please enter an item name.\n";
-            }
-            if (string.IsNullOrWhiteSpace(newItem.Category))
-            {
-                errorMessage += "Please select a category.\n";
-            }
-            if (newItem.Price <= 0)
-            {
-                errorMessage += "Please enter a valid price.\n";
-            }
-            if (newItem.Quantity <= 0)
-            {
-                errorMessage += "Please enter a valid quantity.\n";
-            }
-
-            if (!string.IsNullOrWhiteSpace(errorMessage))
-            {
-                _ = JSRuntime.InvokeVoidAsync("alert", errorMessage);
+                // Handle case where family group is not set
+                await JSRuntime.InvokeVoidAsync("alert", "Family group is not set. Please contact your administrator.");
+                NavigationManager.NavigateTo("/login", forceLoad: true);
                 return;
             }
 
-            var item = new ShoppingItem
-                {
-                    Name = newItem.Name,
-                    Category = newItem.Category,
-                    Price = newItem.Price,
-                    Quantity = newItem.Quantity
-                };
+            // Load shopping items from the database
+            shoppingItems = await ShoppingListService.GetShoppingItemsAsync(familyGroup);
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login", forceLoad: true);
+        }
+    }
 
-            shoppingItems.Add(item);
-            newItem = new ShoppingItem();
+    private async Task AddItem()
+    {
+        if (string.IsNullOrWhiteSpace(newItem.Name))
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Item name is required.");
+            return;
+        }
+
+        newItem.FamilyGroup = familyGroup ?? string.Empty;
+
+        try
+        {
+            var addedItem = await ShoppingListService.AddShoppingItemAsync(newItem);
+            shoppingItems.Add(addedItem);
+            newItem = new ShoppingItem(); // Reset the form
             StateHasChanged();
         }
         catch (Exception ex)
         {
-            _ = JSRuntime.InvokeVoidAsync("alert", $"Error: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", $"Error adding item: {ex.Message}");
         }
     }
 
-    private void RemoveItem(ShoppingItem item)
+    private async Task RemoveItem(ShoppingItem item)
     {
-        shoppingItems.Remove(item);
-        StateHasChanged();
-    }
-
-    public class ShoppingItem
-    {
-        public string Name { get; set; } = "";
-        public string Category { get; set; } = "";
-        public decimal Price { get; set; }
-        public int Quantity { get; set; } = 1;
+        try
+        {
+            await ShoppingListService.DeleteShoppingItemAsync(item.Id);
+            shoppingItems.Remove(item);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Error removing item: {ex.Message}");
+        }
     }
 
     private async Task HandleLogout()
     {
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
-        NavigationManager.NavigateTo("/login");
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
+            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
+            NavigationManager.NavigateTo("/login", forceLoad: true); // Force Page Reload
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Logout failed: {ex.Message}");
+            // Optionally, display an error message to the user
+        }
     }
 }
