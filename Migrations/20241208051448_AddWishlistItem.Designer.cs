@@ -2,6 +2,7 @@
 using Easy_Peasy_ShoppingList.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyPeasyShoppingList.Migrations
 {
     [DbContext(typeof(ShoppingListDbContext))]
-    partial class ShoppingListDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241208051448_AddWishlistItem")]
+    partial class AddWishlistItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");

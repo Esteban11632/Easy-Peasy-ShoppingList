@@ -9,6 +9,7 @@ namespace Easy_Peasy_ShoppingList.Data
         public DbSet<FamilyGroupEntity> FamilyGroups => Set<FamilyGroupEntity>();
 
         public DbSet<ShoppingItem> ShoppingItems { get; set; } = null!;
+        public DbSet<WishlistItem> WishlistItems { get; set; } = null!;
 
         public ShoppingListDbContext(DbContextOptions<ShoppingListDbContext> options)
             : base(options)
@@ -29,6 +30,9 @@ namespace Easy_Peasy_ShoppingList.Data
 
             modelBuilder.Entity<ShoppingItem>()
                 .HasIndex(s => s.FamilyGroup);
+
+            modelBuilder.Entity<WishlistItem>()
+                .HasIndex(w => w.FamilyGroup);
         }
     }
 }

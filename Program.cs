@@ -32,6 +32,7 @@ builder.Services.AddScoped<IRegister, RegisterManager>();
 builder.Services.AddScoped<ITaskStorage, FileTaskStorage>();
 builder.Services.AddScoped<AdminTaskManager>();
 builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
+builder.Services.AddScoped<IWishlistService, WishlistService>();
 
 builder.Services.AddDbContext<ShoppingListDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -50,5 +51,4 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
-
 
