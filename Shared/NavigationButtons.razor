@@ -28,8 +28,16 @@
     }
     private async Task HandleLogout()
     {
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
-        NavigationManager.NavigateTo("/login");
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
+            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
+            NavigationManager.NavigateTo("/login", forceLoad: true); // Force Page Reload
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Logout failed: {ex.Message}");
+            // Optionally, display an error message to the user
+        }
     }
 }
