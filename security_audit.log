@@ -169,3 +169,5 @@
 {"Timestamp":"2024-12-08T02:28:57.5390959Z","Username":"Adrian10","EventType":"LOGIN_SUCCESS","Details":"Session: 69vv/QbAOkyDzQ\u002B1fWpPYw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-08T02:29:13.1565157Z","Username":"Adrian12","EventType":"REGISTRATION","Details":"User registered in Quiros group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-08T02:29:15.6556298Z","Username":"Adrian12","EventType":"LOGIN_SUCCESS","Details":"Session: I/WvrEnqY0CgQh33Fmyo9g==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-08T02:39:53.579614Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: 3hzvk9KD8kiLGtwHR0OmGw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-08T02:40:18.2359342Z","Username":"Adrian10","EventType":"LOGIN_SUCCESS","Details":"Session: c44S8H9lfUqcXYdA5vFQfQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
