@@ -14,7 +14,7 @@
 
 @if (isAuthenticated)
 {
-    <NavigationButtons /> <!-- Include Navigation Buttons Here -->
+    @* <NavigationButtons /> <!-- Include Navigation Buttons Here --> *@
 
     <div class="shopping-list-container">
         <div class="header-container">
@@ -197,6 +197,7 @@ else
         }
     }
 
+
     private async Task HandleLogout()
     {
         try
@@ -211,4 +212,5 @@ else
             // Optionally, display an error message to the user
         }
     }
+
 }

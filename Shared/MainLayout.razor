@@ -1,8 +1,16 @@
+@using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.JSInterop
 @inherits LayoutComponentBase
 @inject IJSRuntime JSRuntime
+@implements IDisposable
+@inject NavigationManager NavigationManager
 
 <div class="page">
+    @if (showNavigationButtons)
+    {
+        <NavigationButtons />
+    }
+
     <button onclick="@(async () => await ToggleTheme())" class="theme-toggle">
         @(isDarkMode ? "☀️ Light" : "🌙 Dark")
     </button>
@@ -14,12 +22,15 @@
 
 @code {
     private bool isDarkMode;
+    private bool showNavigationButtons = true;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             isDarkMode = await JSRuntime.InvokeAsync<bool>("initializeTheme");
+            UpdateNavigationButtonsVisibility(NavigationManager.Uri);
+            NavigationManager.LocationChanged += OnLocationChanged;
             StateHasChanged();
         }
         catch
@@ -40,5 +51,31 @@
         {
             isDarkMode = !isDarkMode;
         }
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        UpdateNavigationButtonsVisibility(e.Location);
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void UpdateNavigationButtonsVisibility(string uri)
+    {
+        var path = new Uri(uri).AbsolutePath.ToLower();
+
+        // Define routes where NavigationButtons should not be displayed
+        var excludedRoutes = new List<string>
+{
+"/login",
+"/register",
+"/", // Assuming "/" redirects to "/login" via LoginRedirect.razor
+};
+
+        showNavigationButtons = !excludedRoutes.Contains(path);
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }
