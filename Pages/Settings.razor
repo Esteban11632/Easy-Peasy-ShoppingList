@@ -2,6 +2,7 @@
 @using UserAuthentication
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
 @inject ILogin LoginService
 @inject IFamily FamilyService
@@ -13,7 +14,7 @@
 
     <div class="header-container">
         <h3>Settings</h3>
-        <button class="btn btn-danger" @onclick="HandleLogout">Logout</button>
+        <button @onclick="@(async () => await HandleLogout())" class="btn btn-danger">Logout</button>
     </div>
 
     <div class="user-info">
@@ -24,7 +25,7 @@
     <hr />
 
     <h4>Change Username</h4>
-    <button class="btn btn-primary" @onclick="ToggleChangeNameForm">Change Username</button>
+    <button class="btn btn-primary" @onclick="@(async () => await ToggleChangeNameForm())">Change Username</button>
 
     @if (showChangeNameForm)
     {
@@ -49,16 +50,36 @@
             }
 
             <button type="submit" class="btn btn-success">Submit</button>
-            <button type="button" class="btn btn-secondary" @onclick="ToggleChangeNameForm">Cancel</button>
+            <button type="button" class="btn btn-secondary"
+                @onclick="@(async () => await ToggleChangeNameForm())">Cancel</button>
         </EditForm>
+
+        <div class="explanatory-text mt-3">
+            <p>
+                <strong>Important:</strong> Changing your username will require you to log in again with your new
+                credentials.
+                Please ensure that you remember your new username as it will be used for future logins and identification
+                within the application.
+                Additionally, any references to your old username in tasks, family groups, or wishlists will be updated
+                automatically.
+            </p>
+            <p>
+                <em>Username Requirements:</em>
+            <ul>
+                <li>Must be between 3 and 20 characters.</li>
+                <li>Can only contain letters, numbers, and underscores.</li>
+            </ul>
+            </p>
+        </div>
     }
+
 </div>
 
 @code {
     private bool isAuthenticated = false;
     private string currentUsername = string.Empty;
     private string familyGroup = string.Empty;
-    private bool showChangeNameForm = true;
+    private bool showChangeNameForm = false;
     private string successMessage = string.Empty;
     private string errorMessage = string.Empty;
 
@@ -78,7 +99,6 @@
                 return;
             }
 
-            currentUsername = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
             familyGroup = await UserService.GetFamilyGroupAsync(currentUsername);
 
             // Optionally, you can log or perform additional checks here
@@ -106,7 +126,7 @@
         }
     }
 
-    private void ToggleChangeNameForm()
+    private async Task ToggleChangeNameForm()
     {
         Console.WriteLine("ToggleChangeNameForm method invoked.");
 
@@ -118,13 +138,17 @@
             successMessage = string.Empty;
             errorMessage = string.Empty;
         }
+
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task HandleChangeName()
     {
         try
         {
+            Console.WriteLine("HandleChangeName invoked.");
             bool isChanged = await UserService.ChangeUsernameAsync(currentUsername, changeNameModel.NewUsername);
+            Console.WriteLine($"ChangeUsernameAsync returned: {isChanged}");
 
             if (isChanged)
             {
@@ -132,10 +156,13 @@
                 await JSRuntime.InvokeVoidAsync("localStorage.setItem", "username", changeNameModel.NewUsername);
                 currentUsername = changeNameModel.NewUsername;
                 successMessage = "Username updated successfully.";
-                ToggleChangeNameForm();
+                Console.WriteLine("Username updated and form toggled.");
+                await ToggleChangeNameForm();
+                await HandleLogout();
             }
             else
             {
+                Console.WriteLine("Failed to update username.");
                 errorMessage = "Failed to update username. Please try again.";
             }
         }
