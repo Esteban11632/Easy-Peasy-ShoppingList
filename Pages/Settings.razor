@@ -1,0 +1,156 @@
+@page "/settings"
+@using UserAuthentication
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+@inject ILogin LoginService
+@inject IFamily FamilyService
+@inject IUserService UserService
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+<div class="shopping-list-container">
+
+    <div class="header-container">
+        <h3>Settings</h3>
+        <button class="btn btn-danger" @onclick="HandleLogout">Logout</button>
+    </div>
+
+    <div class="user-info">
+        <p><strong>Current Username:</strong> @currentUsername</p>
+        <p><strong>Family Group:</strong> @familyGroup</p>
+    </div>
+
+    <hr />
+
+    <h4>Change Username</h4>
+    <button class="btn btn-primary" @onclick="ToggleChangeNameForm">Change Username</button>
+
+    @if (showChangeNameForm)
+    {
+        <EditForm Model="@changeNameModel" OnValidSubmit="HandleChangeName">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="newUsername">New Username:</label>
+                <InputText id="newUsername" @bind-Value="changeNameModel.NewUsername" class="form-control" />
+                <ValidationMessage For="@(() => changeNameModel.NewUsername)" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-success">@successMessage</div>
+            }
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger">@errorMessage</div>
+            }
+
+            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="button" class="btn btn-secondary" @onclick="ToggleChangeNameForm">Cancel</button>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private bool isAuthenticated = false;
+    private string currentUsername = string.Empty;
+    private string familyGroup = string.Empty;
+    private bool showChangeNameForm = true;
+    private string successMessage = string.Empty;
+    private string errorMessage = string.Empty;
+
+    private ChangeNameModel changeNameModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Retrieve authentication data from localStorage
+            currentUsername = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+            isAuthenticated = !string.IsNullOrEmpty(currentUsername);
+
+            if (!isAuthenticated)
+            {
+                NavigationManager.NavigateTo("/login", forceLoad: true);
+                return;
+            }
+
+            currentUsername = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+            familyGroup = await UserService.GetFamilyGroupAsync(currentUsername);
+
+            // Optionally, you can log or perform additional checks here
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error during initialization: {ex.Message}");
+            NavigationManager.NavigateTo("/login", forceLoad: true);
+        }
+    }
+
+    private async Task HandleLogout()
+    {
+        try
+        {
+            //await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
+            //await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
+            await JSRuntime.InvokeVoidAsync("localStorage.clear");
+            NavigationManager.NavigateTo("/login", forceLoad: true); // Force Page Reload
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Logout failed: {ex.Message}");
+            // Optionally, display an error message to the user
+        }
+    }
+
+    private void ToggleChangeNameForm()
+    {
+        Console.WriteLine("ToggleChangeNameForm method invoked.");
+
+        showChangeNameForm = !showChangeNameForm;
+        // Reset messages and form
+        if (!showChangeNameForm)
+        {
+            changeNameModel = new ChangeNameModel();
+            successMessage = string.Empty;
+            errorMessage = string.Empty;
+        }
+    }
+
+    private async Task HandleChangeName()
+    {
+        try
+        {
+            bool isChanged = await UserService.ChangeUsernameAsync(currentUsername, changeNameModel.NewUsername);
+
+            if (isChanged)
+            {
+                // Update localStorage with the new username
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "username", changeNameModel.NewUsername);
+                currentUsername = changeNameModel.NewUsername;
+                successMessage = "Username updated successfully.";
+                ToggleChangeNameForm();
+            }
+            else
+            {
+                errorMessage = "Failed to update username. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Change username failed: {ex.Message}");
+            errorMessage = "An error occurred while updating your username.";
+        }
+    }
+
+    public class ChangeNameModel
+    {
+        [Required(ErrorMessage = "New username is required.")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 20 characters.")]
+        [RegularExpression(@"^\w+$", ErrorMessage = "Username can only contain letters, numbers, and underscores.")]
+        public string NewUsername { get; set; } = string.Empty;
+    }
+}

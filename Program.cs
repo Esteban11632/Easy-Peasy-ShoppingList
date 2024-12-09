@@ -18,6 +18,7 @@ builder.Services.AddServerSideBlazor(options =>
 });
 
 // Add your application services
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserValidator, UserValidator>();
 builder.Services.AddScoped<ICredentialStorage, DatabaseCredentialStorage>();
 builder.Services.AddScoped<IFamilyGroupManager, FamilyGroupManager>();
