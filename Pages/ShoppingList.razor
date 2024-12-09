@@ -1,8 +1,12 @@
 @page "/shopping-list"
-@using UserAuthentication;
+@using UserAuthentication
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Web
+@using Easy_Peasy_ShoppingList.Shared
+@using Easy_Peasy_ShoppingList.Models
+@using Easy_Peasy_ShoppingList.Services
+@inject IShoppingListService ShoppingListService
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject ILogin LoginService
@@ -10,6 +14,8 @@
 
 @if (isAuthenticated)
 {
+    <NavigationButtons /> <!-- Include Navigation Buttons Here -->
+
     <div class="shopping-list-container">
         <div class="header-container">
             <h3>Shopping List</h3>
@@ -40,12 +46,12 @@
         }
 
         <div class="filter-section">
-            <select @bind-value="selectedCategory" @bind-value:event="onchange" class="category-filter">
+            <select @bind="selectedCategory" class="category-filter">
                 <option value="">All Categories</option>
                 <option value="Groceries">Groceries</option>
                 <option value="Electronics">Electronics</option>
                 <option value="Clothing">Clothing</option>
-                <option value="Home">Home & Garden</option>
+                <option value="Home & Garden">Home & Garden</option>
                 <option value="Other">Other</option>
             </select>
         </div>
@@ -86,6 +92,10 @@
         </div>
     </div>
 }
+else
+{
+    <p>Redirecting to login...</p>
+}
 
 @code {
     private List<ShoppingItem> shoppingItems = new();
@@ -99,24 +109,36 @@
     private IEnumerable<ShoppingItem> FilteredItems =>
     string.IsNullOrEmpty(selectedCategory)
     ? shoppingItems
-    : shoppingItems.Where(item => item.Category == selectedCategory);
+    : shoppingItems.Where(item => item.Category.Equals(selectedCategory, StringComparison.OrdinalIgnoreCase));
 
     protected override async Task OnInitializedAsync()
     {
-        var username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
-        isAuthenticated = !string.IsNullOrEmpty(username);
-        if (!isAuthenticated)
+        currentUsername = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+        isAuthenticated = !string.IsNullOrEmpty(currentUsername);
+
+        if (isAuthenticated)
         {
-            NavigationManager.NavigateTo("/login");
+            isAdmin = LoginService.IsAdmin(currentUsername);
+            familyGroup = FamilyService.GetFamilyGroup(currentUsername);
+
+            if (string.IsNullOrEmpty(familyGroup))
+            {
+                // Handle case where family group is not set
+                await JSRuntime.InvokeVoidAsync("alert", "Family group is not set. Please contact your administrator.");
+                NavigationManager.NavigateTo("/login", forceLoad: true);
+                return;
+            }
+
+            // Load shopping items from the database
+            shoppingItems = await ShoppingListService.GetShoppingItemsAsync(familyGroup);
         }
         else
         {
-            currentUsername = username;
-            isAdmin = LoginService.IsAdmin(username);
-            familyGroup = FamilyService.GetFamilyGroup(username);
+            NavigationManager.NavigateTo("/login", forceLoad: true);
         }
     }
-    private void HandleAddItem(MouseEventArgs e)
+
+    private async Task HandleAddItem(MouseEventArgs e)
     {
         try
         {
@@ -141,46 +163,52 @@
 
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
-                _ = JSRuntime.InvokeVoidAsync("alert", errorMessage);
+                await JSRuntime.InvokeVoidAsync("alert", errorMessage);
                 return;
             }
 
-            var item = new ShoppingItem
-                {
-                    Name = newItem.Name,
-                    Category = newItem.Category,
-                    Price = newItem.Price,
-                    Quantity = newItem.Quantity
-                };
+            newItem.FamilyGroup = familyGroup;
 
-            shoppingItems.Add(item);
+            // Add the item to the database
+            var addedItem = await ShoppingListService.AddShoppingItemAsync(newItem);
+            shoppingItems.Add(addedItem);
+
+            // Reset the form
             newItem = new ShoppingItem();
             StateHasChanged();
         }
         catch (Exception ex)
         {
-            _ = JSRuntime.InvokeVoidAsync("alert", $"Error: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", $"Error adding item: {ex.Message}");
         }
     }
 
-    private void RemoveItem(ShoppingItem item)
+    private async Task RemoveItem(ShoppingItem item)
     {
-        shoppingItems.Remove(item);
-        StateHasChanged();
-    }
-
-    public class ShoppingItem
-    {
-        public string Name { get; set; } = "";
-        public string Category { get; set; } = "";
-        public decimal Price { get; set; }
-        public int Quantity { get; set; } = 1;
+        try
+        {
+            await ShoppingListService.DeleteShoppingItemAsync(item.Id);
+            shoppingItems.Remove(item);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Error removing item: {ex.Message}");
+        }
     }
 
     private async Task HandleLogout()
     {
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
-        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
-        NavigationManager.NavigateTo("/login");
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
+            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
+            NavigationManager.NavigateTo("/login", forceLoad: true); // Force Page Reload
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Logout failed: {ex.Message}");
+            // Optionally, display an error message to the user
+        }
     }
 }

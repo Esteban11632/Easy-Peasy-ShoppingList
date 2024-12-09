@@ -1,0 +1,203 @@
+@page "/wishlist"
+@using UserAuthentication
+@using Easy_Peasy_ShoppingList.Shared
+@using Easy_Peasy_ShoppingList.Models
+@using Easy_Peasy_ShoppingList.Services
+@using Microsoft.AspNetCore.Components.Web
+@inject IWishlistService WishlistService
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject ILogin LoginService
+@inject IFamily FamilyService
+
+
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+
+
+@if (isAuthenticated)
+{
+    <NavigationButtons />
+
+    <div class="shopping-list-container">
+        <div class="header-container">
+            <h3>Wish List</h3>
+        </div>
+
+        <div class="user-info">
+            <p>User: @currentUsername @(isAdmin ? "(Admin)" : "")</p>
+            <p>Family Group: @familyGroup</p>
+        </div>
+
+        <div class="add-item-form">
+            <input @bind="newItem.Name" placeholder="Item name" />
+            <select @bind="newItem.Category">
+                <option value="">Select Category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Books">Books</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Home & Garden">Home & Garden</option>
+                <option value="Other">Other</option>
+            </select>
+            <input @bind="newItem.Price" type="number" step="0.01" placeholder="Price" />
+            <button @onclick="HandleAddItem" class="btn btn-primary">Add Item</button>
+        </div>
+
+        <div class="filter-section">
+            <select @bind="selectedCategory" class="category-filter">
+                <option value="">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Books">Books</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Home & Garden">Home & Garden</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Requested By</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in FilteredItems)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Category</td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>@item.RequestingUser</td>
+                        <td>
+                            @if (isAdmin || item.RequestingUser == currentUsername)
+                            {
+                                <button @onclick="() => RemoveItem(item)" class="btn btn-danger">Remove</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="total">
+            <h4>Total: @(FilteredItems.Sum(i => i.Price).ToString("C"))</h4>
+        </div>
+    </div>
+}
+else
+{
+    <div class="wishlist-container">
+        <p>You must be logged in to view this page.</p>
+    </div>
+}
+
+@code {
+    private List<WishlistItem> wishlistItems = new();
+    private WishlistItem newItem = new();
+    private string selectedCategory = "";
+    private bool isAuthenticated;
+    private bool isAdmin;
+    private string currentUsername = string.Empty;
+    private string familyGroup = string.Empty;
+
+    private IEnumerable<WishlistItem> FilteredItems =>
+    string.IsNullOrEmpty(selectedCategory)
+    ? wishlistItems
+    : wishlistItems.Where(item => item.Category == selectedCategory);
+
+    protected override async Task OnInitializedAsync()
+    {
+        var username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+        isAuthenticated = !string.IsNullOrEmpty(username);
+        if (!isAuthenticated)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            currentUsername = username;
+            isAdmin = LoginService.IsAdmin(username);
+            familyGroup = FamilyService.GetFamilyGroup(username);
+
+            // Load wishlist items from the database
+            wishlistItems = await WishlistService.GetWishlistItemsAsync(familyGroup);
+        }
+    }
+
+    private async Task HandleAddItem(MouseEventArgs e)
+    {
+        try
+        {
+            string errorMessage = "";
+
+            if (string.IsNullOrWhiteSpace(newItem.Name))
+            {
+                errorMessage += "Please enter an item name.\n";
+            }
+            if (string.IsNullOrWhiteSpace(newItem.Category))
+            {
+                errorMessage += "Please select a category.\n";
+            }
+            if (newItem.Price <= 0)
+            {
+                errorMessage += "Please enter a valid price.\n";
+            }
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                await JSRuntime.InvokeVoidAsync("alert", errorMessage);
+                return;
+            }
+
+            newItem.FamilyGroup = familyGroup;
+            newItem.RequestingUser = currentUsername;
+
+            // Add the item to the database
+            var addedItem = await WishlistService.AddWishlistItemAsync(newItem);
+            wishlistItems.Add(addedItem);
+
+            // Reset the form
+            newItem = new WishlistItem();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Error adding item: {ex.Message}");
+        }
+    }
+
+    private async Task RemoveItem(WishlistItem item)
+    {
+        try
+        {
+            await WishlistService.RemoveWishlistItemAsync(item.Id);
+            wishlistItems.Remove(item);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Error removing item: {ex.Message}");
+        }
+    }
+
+    private async Task HandleLogout()
+    {
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
+            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
+            NavigationManager.NavigateTo("/login", forceLoad: true); // Force Page Reload
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Logout failed: {ex.Message}");
+            // Optionally, display an error message to the user
+        }
+    }
+
+}

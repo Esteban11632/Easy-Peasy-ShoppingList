@@ -45,21 +45,28 @@ Its also very important to note that if the application GitHub Desktop is instal
    dotnet restore
    ```
 
-4. **Build the Project**:
+4. **Update the Database**:
+   Run the following command to update / connect to the database:
+
+   ```
+   dotnet ef database update
+   ```
+
+5. **Build the Project**:
    Build the project to ensure everything is set up correctly:
 
    ```
    dotnet build
    ```
 
-5. **Run the Application**:
+6. **Run the Application**:
    Start the application using the following command:
 
    ```
    dotnet run
    ```
 
-6. **Access the Application**:
+7. **Access the Application**:
    Open your web browser and navigate to `http://localhost:5000`
 
 Lastly, because the buttons to redirect the user to another page are not working, the main way you can change between pages is manually copy the URL and paste it into your browser.
