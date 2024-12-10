@@ -100,22 +100,19 @@
                     </InputSelect>
                 </div>
 
-                @if (permissionModel.SelectedUsername != null)
-                {
-                    <div class="form-group">
-                        <label>Permission:</label>
-                        <InputRadioGroup @bind-Value="permissionModel.IsGrantingAdmin">
-                            <div class="form-check">
-                                <InputRadio Value="true" class="form-check-input" id="grantAdmin" />
-                                <label for="grantAdmin" class="form-check-label">Grant Admin Permission</label>
-                            </div>
-                            <div class="form-check">
-                                <InputRadio Value="false" class="form-check-input" id="revokeAdmin" />
-                                <label for="revokeAdmin" class="form-check-label">Revoke Admin Permission</label>
-                            </div>
-                        </InputRadioGroup>
-                    </div>
-                }
+                <div class="form-group">
+                    <label>Permission:</label>
+                    <InputRadioGroup @bind-Value="permissionModel.IsGrantingAdmin">
+                        <div class="form-check">
+                            <label for="grantAdmin" class="form-check-label">Grant Admin Permission</label>
+                            <InputRadio Value="true" class="form-check-input" id="grantAdmin" />
+                        </div>
+                        <div class="form-check mt-2">
+                            <label for="revokeAdmin" class="form-check-label">Revoke Admin Permission</label>
+                            <InputRadio Value="false" class="form-check-input" id="revokeAdmin" />
+                        </div>
+                    </InputRadioGroup>
+                </div>
 
                 @if (!string.IsNullOrEmpty(permissionSuccessMessage))
                 {
@@ -272,7 +269,6 @@
             errorMessage = "An error occurred while updating your username.";
         }
     }
-
 
     private bool CanSubmitPermission =>
     !string.IsNullOrEmpty(permissionModel.SelectedUsername) &&
