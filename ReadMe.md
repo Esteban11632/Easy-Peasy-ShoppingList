@@ -16,7 +16,9 @@ To Check if you have .NET SDK installed, you can go to your terminal and run the
 dotnet --version
 ```
 
-To download .NET SDK, you can go to this link: https://dotnet.microsoft.com/en-us/download
+To download .NET SDK, you can go to this link and install choose the .NET 8.0 version:
+
+https://dotnet.microsoft.com/en-us/download
 
 Make sure to download the latest version.
 
