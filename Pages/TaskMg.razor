@@ -110,40 +110,25 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        try 
+
+        // Get authentication state
+        username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+        isAuthenticated = !string.IsNullOrEmpty(username);
+
+        if (isAuthenticated)
         {
-            // Get authentication state
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-            
-            // Check if user is authenticated
-            isAuthenticated = user.Identity?.IsAuthenticated ?? false;
-            
-            if (isAuthenticated)
-            {
-                username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
-                if (!string.IsNullOrEmpty(username))
-                {
-                    isAdmin = LoginService.IsAdmin(username);
-                    familyGroup = FamilyService.GetFamilyGroup(username);
-                    familyUsers = await FamilyService.GetUsersInFamilyGroup(familyGroup);
-                    LoadUserTasks(username);
-                }
-                else
-                {
-                    NavigationManager.NavigateTo("/login");
-                }
-            }
-            else
-            {
-                NavigationManager.NavigateTo("/login");
-            }
+
+            isAdmin = LoginService.IsAdmin(username);
+            familyGroup = FamilyService.GetFamilyGroup(username);
+            familyUsers = await FamilyService.GetUsersInFamilyGroup(familyGroup);
+            LoadUserTasks(username);
+
         }
-        catch (Exception)
+        else
         {
-            isAuthenticated = false;
             NavigationManager.NavigateTo("/login");
         }
+
     }
 
     private void LoadUserTasks(string username)

@@ -1,6 +1,9 @@
 using Easy_Peasy_ShoppingList.Data;
 using Easy_Peasy_ShoppingList.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TaskManager
 {
@@ -30,16 +33,23 @@ namespace TaskManager
 
         public List<TodoTask> GetTasksByFamilyGroup(string familyGroup)
         {
+            if (string.IsNullOrEmpty(familyGroup))
+            {
+                return new List<TodoTask>();
+            }
+
+            string normalizedFamilyGroup = familyGroup.ToLower();
+
             return _context.Tasks
-                .Where(t => t.FamilyGroup.Equals(familyGroup, StringComparison.OrdinalIgnoreCase))
-                .Select(t => new TodoTask(
-                    t.Title,
-                    t.Description,
-                    t.AssignedTo,
-                    t.FamilyGroup,
-                    t.IsDone
-                ))
-                .ToList();
+                           .Where(t => t.FamilyGroup.ToLower() == normalizedFamilyGroup)
+                           .Select(t => new TodoTask(
+                               t.Title,
+                               t.Description,
+                               t.AssignedTo,
+                               t.FamilyGroup,
+                               t.IsDone
+                           ))
+                           .ToList();
         }
 
         public void SaveTasks(Dictionary<string, TodoTask> tasks)
@@ -59,7 +69,8 @@ namespace TaskManager
                         Title = task.Title,
                         Description = task.Description,
                         AssignedTo = task.AssignedTo,
-                        FamilyGroup = task.FamilyGroup
+                        FamilyGroup = task.FamilyGroup,
+                        IsDone = task.IsDone
                     });
                 }
 
@@ -79,8 +90,8 @@ namespace TaskManager
             try
             {
                 var task = _context.Tasks
-                    .FirstOrDefault(t => t.Title == title && 
-                                       t.FamilyGroup.Equals(familyGroup, StringComparison.OrdinalIgnoreCase));
+                    .FirstOrDefault(t => t.Title == title &&
+                                       t.FamilyGroup.ToLower() == familyGroup.ToLower());
 
                 if (task != null)
                 {
@@ -94,7 +105,7 @@ namespace TaskManager
                         // Update the status if not done
                         task.IsDone = isDone;
                     }
-                    
+
                     _context.SaveChanges();
                     transaction.Commit();
                 }
