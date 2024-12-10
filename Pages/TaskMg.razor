@@ -98,7 +98,7 @@ else
 }
 
 @code {
-    private TodoTask newTask = new TodoTask();
+    private TodoTask newTask = new TodoTask("", "");
     private bool isAuthenticated;
     private bool isAdmin;
     private List<TodoTask> userTasks = new List<TodoTask>();
@@ -110,18 +110,38 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
-        isAuthenticated = !string.IsNullOrEmpty(username);
-
-        if (isAuthenticated)
+        try 
         {
-            isAdmin = LoginService.IsAdmin(username);
-            familyGroup = FamilyService.GetFamilyGroup(username); // This one is not async
-            familyUsers = await FamilyService.GetUsersInFamilyGroup(familyGroup); // Add await here
-            LoadUserTasks(username);
+            // Get authentication state
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            
+            // Check if user is authenticated
+            isAuthenticated = user.Identity?.IsAuthenticated ?? false;
+            
+            if (isAuthenticated)
+            {
+                username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+                if (!string.IsNullOrEmpty(username))
+                {
+                    isAdmin = LoginService.IsAdmin(username);
+                    familyGroup = FamilyService.GetFamilyGroup(username);
+                    familyUsers = await FamilyService.GetUsersInFamilyGroup(familyGroup);
+                    LoadUserTasks(username);
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/login");
+                }
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/login");
+            }
         }
-        else
+        catch (Exception)
         {
+            isAuthenticated = false;
             NavigationManager.NavigateTo("/login");
         }
     }
@@ -168,7 +188,7 @@ else
 
         AdminTaskManager.CreateTask(newTask.Title, newTask.Description, newTask.AssignedTo, newTask.FamilyGroup);
         LoadUserTasks(newTask.AssignedTo); // Reload user tasks after creating a new task
-        newTask = new TodoTask(); // Reset the form
+        newTask = new TodoTask("", ""); // Reset the form
         showCreateTaskForm = false; // Hide the form after creation
         NavigationManager.NavigateTo("/task-manager", true);
     }
@@ -178,7 +198,7 @@ else
         showCreateTaskForm = !showCreateTaskForm;
         if (!showCreateTaskForm)
         {
-            newTask = new TodoTask();
+            newTask = new TodoTask("", "");
             errorMessage = string.Empty;
         }
     }

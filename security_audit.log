@@ -197,3 +197,14 @@
 {"Timestamp":"2024-12-10T02:46:41.2030392Z","Username":"Esteban","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-10T02:46:50.8491598Z","Username":"Esteban","EventType":"REGISTRATION","Details":"User registered in Murillo Family group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-10T02:46:52.1263339Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: bZoqGVTxQUidvobxj7Fx2w==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T03:47:58.1867619Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: K6tgSTjtw0WOXXZw/Cujqw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T03:53:33.5510709Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: ekVBZcgXh0y/gcFjGOHcaQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T03:53:45.6241674Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: y5LwoXyD/0S4WLSdiBix3Q==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T03:58:08.4989597Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: moIQA0XZ\u002BEqSlmgwmGJ2GA==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T03:58:10.7420187Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: uQ6htI2F8k658OMSEDJLWA==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T03:58:12.5151035Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: 0MRs/NWbaUuFbT\u002B3Db8wqQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T03:58:14.7173199Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: Pf7N7z5e1EuiVHBY8UYCVg==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T04:01:29.4140905Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: O\u002BUo7tqGm0yXF5C7TEwq/g==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T04:01:31.4409567Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: CKw63iRp6kiKuBLKJB0ldg==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T04:01:33.1575149Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: S17Ak4eUGES5WzwBtLvwUg==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T04:01:41.9273093Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: HW1JSjDX\u002B0\u002BDhol4Xyg0mQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}

@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Authorization;
 using UserAuthentication;
 using TaskManager;
 using Microsoft.EntityFrameworkCore;
 using Easy_Peasy_ShoppingList.Data;
 using Easy_Peasy_ShoppingList.Services;
+using Easy_Peasy_ShoppingList.Services.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,9 @@ builder.Services.AddScoped<IWishlistService, WishlistService>();
 
 builder.Services.AddDbContext<ShoppingListDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAuthenticationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
 var app = builder.Build();
 

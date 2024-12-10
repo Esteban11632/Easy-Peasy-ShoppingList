@@ -8,21 +8,18 @@ namespace TaskManager
         public string FamilyGroup { get; set; }
         public bool IsDone { get; set; }
 
-        public TodoTask(string title, string description, string assignedTo, string familyGroup, bool isDone = false)
+        public TodoTask(string title, string description, string assignedTo = "Unassigned", string familyGroup = "Unassigned", bool isDone = false)
         {
-            Title = title ?? throw new ArgumentNullException(nameof(title));
-            Description = description ?? throw new ArgumentNullException(nameof(description));
-            AssignedTo = assignedTo ?? throw new ArgumentNullException(nameof(assignedTo));
-            FamilyGroup = familyGroup ?? throw new ArgumentNullException(nameof(familyGroup));
+            Title = title ?? throw new ArgumentNullException(nameof(title)); // Title of the task
+            Description = description ?? throw new ArgumentNullException(nameof(description)); // Description of the task
+            AssignedTo = assignedTo ?? "Unassigned"; // Assigned to of the task
+            FamilyGroup = familyGroup ?? "Unassigned"; // Family group of the task
             IsDone = isDone;
         }
 
-        public TodoTask()
+        public void AssignTo(string user) // Method to assign the task to a user
         {
-            Title = string.Empty;
-            Description = string.Empty;
-            AssignedTo = string.Empty;
-            FamilyGroup = string.Empty;
+            AssignedTo = user ?? throw new ArgumentNullException(nameof(user)); // Assigned to of the task
         }
     }
 }
