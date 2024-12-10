@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Easy_Peasy_ShoppingList.Shared;
 using Easy_Peasy_ShoppingList.Models;
@@ -11,11 +13,13 @@ namespace UserAuthentication
     {
         private readonly IFamily _familyService;
         private readonly ICredentialStorage _credentialStorage;
+        private readonly IFamilyGroupManager _familyGroupManager;
 
-        public UserService(IFamily familyService, ICredentialStorage credentialStorage)
+        public UserService(IFamily familyService, ICredentialStorage credentialStorage, IFamilyGroupManager familyGroupManager)
         {
             _familyService = familyService ?? throw new ArgumentNullException(nameof(familyService));
             _credentialStorage = credentialStorage ?? throw new ArgumentNullException(nameof(credentialStorage));
+            _familyGroupManager = familyGroupManager ?? throw new ArgumentNullException(nameof(familyGroupManager));
         }
 
         /// <summary>
@@ -91,6 +95,10 @@ namespace UserAuthentication
                 _credentialStorage.SaveCredentials(credentials);
 
                 Console.WriteLine($"Username changed from '{currentUsername}' to '{newUsername}' successfully.");
+
+                // Update family group assignments
+                //_familyGroupManager.UpdateUsernameInFamilyGroupsAsync(currentUsername, newUsername);
+
                 return Task.FromResult(true);
             }
             catch (Exception ex)
@@ -98,6 +106,49 @@ namespace UserAuthentication
                 Console.Error.WriteLine($"Error changing username: {ex.Message}");
                 return Task.FromResult(false);
             }
+        }
+
+        // New Method: Get Family Members
+        public Task<List<FamilyMemberModel>> GetFamilyMembersAsync(string familyGroup)
+        {
+            var credentials = _credentialStorage.LoadCredentials();
+
+            var members = credentials.Values
+                                     .Where(u => u.FamilyGroup.Equals(familyGroup, StringComparison.OrdinalIgnoreCase))
+                                     .Select(u => new FamilyMemberModel
+                                     {
+                                         Username = u.Username,
+                                         IsAdmin = u.IsAdmin
+                                     })
+                                     .ToList();
+            return Task.FromResult(members);
+        }
+
+        // New Method: Grant Admin Permission
+        public Task<bool> GrantAdminPermissionAsync(string username)
+        {
+            var credentials = _credentialStorage.LoadCredentials();
+
+            if (credentials.ContainsKey(username))
+            {
+                credentials[username].IsAdmin = true;
+                _credentialStorage.SaveCredentials(credentials);
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
+        }
+
+        // New Method: Revoke Admin Permission
+        public Task<bool> RevokeAdminPermissionAsync(string username)
+        {
+            var credentials = _credentialStorage.LoadCredentials();
+            if (credentials.ContainsKey(username))
+            {
+                credentials[username].IsAdmin = false;
+                _credentialStorage.SaveCredentials(credentials);
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
         }
     }
 }

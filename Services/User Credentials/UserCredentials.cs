@@ -8,7 +8,7 @@ namespace UserAuthentication
         public string Salt { get; } // Stores the salt
         public string PasswordHash { get; } // Stores the password hash
         public string Username { get; } // Stores the username
-        public bool IsAdmin { get; } // Stores if the user is an admin
+        public bool IsAdmin { get; set; } // Stores if the user is an admin
         public string FamilyGroup { get; } // Stores the family group
 
         private const int Iterations = 350000; // Stores the number of iterations for the hashing algorithm

@@ -1,5 +1,6 @@
 @page "/settings"
 @using UserAuthentication
+@using Easy_Peasy_ShoppingList.Models
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
@@ -31,24 +32,25 @@
     {
         <EditForm Model="@changeNameModel" OnValidSubmit="HandleChangeName">
             <DataAnnotationsValidator />
-            <ValidationSummary />
+            @*<ValidationSummary />*@
 
             <div class="form-group">
                 <label for="newUsername">New Username:</label>
                 <InputText id="newUsername" @bind-Value="changeNameModel.NewUsername" class="form-control" />
-                @* <ValidationMessage For="@(() => changeNameModel.NewUsername)" /> *@
+                <ValidationMessage For="@(() => changeNameModel.NewUsername)" />
+                <!-- Removed to prevent field-specific validation messages -->
             </div>
 
             @if (!string.IsNullOrEmpty(successMessage))
             {
                 <div class="alert alert-success">@successMessage</div>
             }
-            @*
+
             @if (!string.IsNullOrEmpty(errorMessage))
             {
                 <div class="alert alert-danger">@errorMessage</div>
             }
-            *@
+
             <button type="submit" class="btn btn-success">Submit</button>
             <button type="button" class="btn btn-secondary"
                 @onclick="@(async () => await ToggleChangeNameForm())">Cancel</button>
@@ -73,6 +75,65 @@
         </div>
     }
 
+    <hr />
+
+    @if (isAdmin)
+    {
+        <h4>Permissions for Other Family Members</h4>
+        <button class="btn btn-primary" @onclick="@(async () => await TogglePermissionsForm())">Manage
+            Permissions</button>
+
+        @if (showPermissionsForm)
+        {
+            <EditForm Model="@permissionModel" OnValidSubmit="HandlePermissionChange">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <label for="familyMember">Select Family Member:</label>
+                    <InputSelect id="familyMember" @bind-Value="permissionModel.SelectedUsername" class="form-control">
+                        <option value="">-- Select a Family Member --</option>
+                        @foreach (var member in familyMembers)
+                        {
+                            <option value="@member.Username">@member.Username (@(member.IsAdmin ? "Admin" : "User"))</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                @if (permissionModel.SelectedUsername != null)
+                {
+                    <div class="form-group">
+                        <label>Permission:</label>
+                        <InputRadioGroup @bind-Value="permissionModel.IsGrantingAdmin">
+                            <div class="form-check">
+                                <InputRadio Value="true" class="form-check-input" id="grantAdmin" />
+                                <label for="grantAdmin" class="form-check-label">Grant Admin Permission</label>
+                            </div>
+                            <div class="form-check">
+                                <InputRadio Value="false" class="form-check-input" id="revokeAdmin" />
+                                <label for="revokeAdmin" class="form-check-label">Revoke Admin Permission</label>
+                            </div>
+                        </InputRadioGroup>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(permissionSuccessMessage))
+                {
+                    <div class="alert alert-success">@permissionSuccessMessage</div>
+                }
+
+                @if (!string.IsNullOrEmpty(permissionErrorMessage))
+                {
+                    <div class="alert alert-danger">@permissionErrorMessage</div>
+                }
+
+                <button type="submit" class="btn btn-primary">Apply</button>
+                <button type="button" class="btn btn-secondary"
+                    @onclick="@(async () => await TogglePermissionsForm())">Close</button>
+            </EditForm>
+        }
+    }
+
 </div>
 
 @code {
@@ -80,10 +141,17 @@
     private string currentUsername = string.Empty;
     private string familyGroup = string.Empty;
     private bool showChangeNameForm = false;
+    private bool showPermissionsForm = false;
+    private bool isAdmin = false;
     private string successMessage = string.Empty;
     private string errorMessage = string.Empty;
+    private string permissionSuccessMessage = string.Empty;
+    private string permissionErrorMessage = string.Empty;
 
     private ChangeNameModel changeNameModel = new();
+    private PermissionModel permissionModel = new();
+
+    private List<FamilyMemberModel> familyMembers = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -91,6 +159,7 @@
         {
             // Retrieve authentication data from localStorage
             currentUsername = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
+            familyGroup = await UserService.GetFamilyGroupAsync(currentUsername);
             isAuthenticated = !string.IsNullOrEmpty(currentUsername);
 
             if (!isAuthenticated)
@@ -99,14 +168,29 @@
                 return;
             }
 
-            familyGroup = await UserService.GetFamilyGroupAsync(currentUsername);
-
-            // Optionally, you can log or perform additional checks here
+            await LoadFamilyMembers();
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error during initialization: {ex.Message}");
-            NavigationManager.NavigateTo("/login", forceLoad: true);
+            Console.Error.WriteLine($"Initialization failed: {ex.Message}");
+            // Optionally, redirect to an error page or display a message
+        }
+    }
+
+    private async Task LoadFamilyMembers()
+    {
+        try
+        {
+            familyMembers = await UserService.GetFamilyMembersAsync(familyGroup);
+            isAdmin = familyMembers.Any(m => m.Username.Equals(currentUsername, StringComparison.OrdinalIgnoreCase) && m.IsAdmin);
+            Console.WriteLine("Family members loaded successfully.");
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to load family members: {ex.Message}");
+            permissionErrorMessage = "Failed to load family members. Please try again.";
+            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -114,8 +198,7 @@
     {
         try
         {
-            //await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
-            //await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
+            Console.WriteLine("HandleLogout invoked.");
             await JSRuntime.InvokeVoidAsync("localStorage.clear");
             NavigationManager.NavigateTo("/login", forceLoad: true); // Force Page Reload
         }
@@ -142,6 +225,22 @@
         await InvokeAsync(StateHasChanged);
     }
 
+    private async Task TogglePermissionsForm()
+    {
+        Console.WriteLine("TogglePermissionsForm method invoked.");
+
+        showPermissionsForm = !showPermissionsForm;
+        // Reset messages and form
+        if (!showPermissionsForm)
+        {
+            permissionModel = new PermissionModel();
+            permissionSuccessMessage = string.Empty;
+            permissionErrorMessage = string.Empty;
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
     private async Task HandleChangeName()
     {
         try
@@ -158,6 +257,7 @@
                 successMessage = "Username updated successfully.";
                 Console.WriteLine("Username updated and form toggled.");
                 await ToggleChangeNameForm();
+                await LoadFamilyMembers();
                 await HandleLogout();
             }
             else
@@ -173,11 +273,77 @@
         }
     }
 
+
+    private bool CanSubmitPermission =>
+    !string.IsNullOrEmpty(permissionModel.SelectedUsername) &&
+    (permissionModel.IsGrantingAdmin || !permissionModel.IsGrantingAdmin);
+
+    private async Task HandlePermissionChange()
+    {
+        if (string.IsNullOrEmpty(permissionModel.SelectedUsername))
+        {
+            permissionErrorMessage = "Please select a family member.";
+            return;
+        }
+
+        if (permissionModel.SelectedUsername.Equals(currentUsername, StringComparison.OrdinalIgnoreCase))
+        {
+            permissionErrorMessage = "You cannot change your own admin permissions.";
+            return;
+        }
+
+        try
+        {
+            bool result = false;
+            if (permissionModel.IsGrantingAdmin)
+            {
+                result = await UserService.GrantAdminPermissionAsync(permissionModel.SelectedUsername);
+            }
+            else
+            {
+                result = await UserService.RevokeAdminPermissionAsync(permissionModel.SelectedUsername);
+            }
+
+            if (result)
+            {
+                permissionSuccessMessage = permissionModel.IsGrantingAdmin
+                ? $"Admin permissions granted to {permissionModel.SelectedUsername}."
+                : $"Admin permissions revoked from {permissionModel.SelectedUsername}.";
+
+                // Refresh the family members list
+                await LoadFamilyMembers();
+            }
+            else
+            {
+                permissionErrorMessage = "Operation failed. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Permission change failed: {ex.Message}");
+            permissionErrorMessage = "An error occurred while changing permissions.";
+        }
+    }
+
+    private void ClearPermissionMessages()
+    {
+        permissionSuccessMessage = string.Empty;
+        permissionErrorMessage = string.Empty;
+    }
+
     public class ChangeNameModel
     {
         [Required(ErrorMessage = "New username is required.")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 20 characters.")]
         [RegularExpression(@"^\w+$", ErrorMessage = "Username can only contain letters, numbers, and underscores.")]
         public string NewUsername { get; set; } = string.Empty;
+    }
+
+    public class PermissionModel
+    {
+        [Required(ErrorMessage = "Please select a family member.")]
+        public string SelectedUsername { get; set; } = string.Empty;
+
+        public bool IsGrantingAdmin { get; set; } = true; // true: Grant, false: Revoke
     }
 }
