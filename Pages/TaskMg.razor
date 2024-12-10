@@ -98,7 +98,7 @@ else
 }
 
 @code {
-    private TodoTask newTask = new TodoTask("", "");
+    private TodoTask newTask = new TodoTask();
     private bool isAuthenticated;
     private bool isAdmin;
     private List<TodoTask> userTasks = new List<TodoTask>();
@@ -168,7 +168,7 @@ else
 
         AdminTaskManager.CreateTask(newTask.Title, newTask.Description, newTask.AssignedTo, newTask.FamilyGroup);
         LoadUserTasks(newTask.AssignedTo); // Reload user tasks after creating a new task
-        newTask = new TodoTask("", ""); // Reset the form
+        newTask = new TodoTask(); // Reset the form
         showCreateTaskForm = false; // Hide the form after creation
         NavigationManager.NavigateTo("/task-manager", true);
     }
@@ -178,7 +178,7 @@ else
         showCreateTaskForm = !showCreateTaskForm;
         if (!showCreateTaskForm)
         {
-            newTask = new TodoTask("", "");
+            newTask = new TodoTask();
             errorMessage = string.Empty;
         }
     }

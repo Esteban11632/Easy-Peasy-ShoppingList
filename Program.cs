@@ -30,7 +30,7 @@ builder.Services.AddScoped<IFamily>(provider =>
 });
 builder.Services.AddScoped<ILogin, LoginManager>();
 builder.Services.AddScoped<IRegister, RegisterManager>();
-builder.Services.AddScoped<ITaskStorage, FileTaskStorage>();
+builder.Services.AddScoped<ITaskStorage, DatabaseTaskStorage>();
 builder.Services.AddScoped<AdminTaskManager>();
 builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
 builder.Services.AddScoped<IWishlistService, WishlistService>();

@@ -194,3 +194,6 @@
 {"Timestamp":"2024-12-09T03:56:08.4823605Z","Username":"Neymar2","EventType":"LOGIN_SUCCESS","Details":"Session: hv0XSa0Pb02gmR\u002Bx7KOIwg==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-09T03:59:22.467122Z","Username":"Neymar2","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-09T03:59:26.5304397Z","Username":"Neymar","EventType":"LOGIN_SUCCESS","Details":"Session: kQlhtPcdlkWLuftRwJiNtQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T02:46:41.2030392Z","Username":"Esteban","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T02:46:50.8491598Z","Username":"Esteban","EventType":"REGISTRATION","Details":"User registered in Murillo Family group","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T02:46:52.1263339Z","Username":"Esteban","EventType":"LOGIN_SUCCESS","Details":"Session: bZoqGVTxQUidvobxj7Fx2w==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
