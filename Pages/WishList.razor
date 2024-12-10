@@ -12,8 +12,8 @@
 
 
 @using Microsoft.JSInterop
-@using Microsoft.AspNetCore.Components
-@using Microsoft.AspNetCore.Components.Web
+@*@using Microsoft.AspNetCore.Components*@
+
 
 
 @if (isAuthenticated)
@@ -182,21 +182,6 @@ else
         catch (Exception ex)
         {
             await JSRuntime.InvokeVoidAsync("alert", $"Error removing item: {ex.Message}");
-        }
-    }
-
-    private async Task HandleLogout()
-    {
-        try
-        {
-            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
-            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
-            NavigationManager.NavigateTo("/login", forceLoad: true); // Force Page Reload
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Logout failed: {ex.Message}");
-            // Optionally, display an error message to the user
         }
     }
 

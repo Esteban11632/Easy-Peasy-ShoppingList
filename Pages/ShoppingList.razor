@@ -14,12 +14,12 @@
 
 @if (isAuthenticated)
 {
-    <NavigationButtons /> <!-- Include Navigation Buttons Here -->
+    @* <NavigationButtons /> <!-- Include Navigation Buttons Here --> *@
 
     <div class="shopping-list-container">
         <div class="header-container">
             <h3>Shopping List</h3>
-            <button class="btn btn-danger" @onclick="HandleLogout">Logout</button>
+            @* <button class="btn btn-danger" @onclick="HandleLogout">Logout</button> *@
         </div>
 
         <div class="user-info">
@@ -197,18 +197,22 @@ else
         }
     }
 
+    /*
     private async Task HandleLogout()
     {
-        try
-        {
-            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
-            await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
-            NavigationManager.NavigateTo("/login", forceLoad: true); // Force Page Reload
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Logout failed: {ex.Message}");
-            // Optionally, display an error message to the user
-        }
+    try
+    {
+    Console.WriteLine("HandleLogout method invoked.");
+    await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "username");
+    await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "isAuthenticated");
+    NavigationManager.NavigateTo("/login", forceLoad: true); // Force Page Reload
     }
+    catch (Exception ex)
+    {
+    Console.Error.WriteLine($"Logout failed: {ex.Message}");
+    // Optionally, display an error message to the user
+    }
+        }
+    */
+
 }

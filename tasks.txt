@@ -5,3 +5,7 @@ Buy Medicine2|Try to man|BigBoss|Salazar
 BigBoss|cdcdcdcd|ok|Quiros
 damn|Hello|BigBoss|Quiros
 Hello|dede|Adrian|Quiros
+Buy BeefJerkey|Bro you gotta buy it no cap|Adrian10|Quiros
+Buy Medicine10|Bro please buy the medicine I need|Adrian10|Quiros
+Buy a Phone|Please check the shopping list, and also remember that you can add things in the wish list|Adrian6|Quiros
+Buy toilet paper|Your mom forgot the toilet paper, please go buy something around 5, the price can be found in the shopping list|Adrian12|Quiros

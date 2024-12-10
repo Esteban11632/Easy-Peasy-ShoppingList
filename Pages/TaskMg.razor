@@ -17,7 +17,7 @@
 
 @if (isAuthenticated)
 {
-    <NavigationButtons /> <!-- Include Navigation Buttons Here -->
+    @* <NavigationButtons /> <!-- Include Navigation Buttons Here */ *@
 
     <div class="task-manager">
         <h3>Task Manager</h3>
@@ -30,43 +30,44 @@
 
         @if (isAdmin)
         {
-            <h4>Create a New Task</h4>
-            <EditForm Model="newTask" OnValidSubmit="HandleCreateTask">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <InputText id="title" @bind-Value="newTask.Title" class="form-control" />
-                    <ValidationMessage For="@(() => newTask.Title)" />
-                </div>
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <InputTextArea id="description" @bind-Value="newTask.Description" class="form-control" />
-                    <ValidationMessage For="@(() => newTask.Description)" />
-                </div>
-                <div class="form-group">
-                    <label for="assignedTo">Assign To:</label>
-                    <select id="assignedTo" @bind="newTask.AssignedTo" class="form-control">
-                        <option value="">Select User</option>
-                        @foreach (var user in familyUsers)
-                        {
-                            <option value="@user">@user</option>
-                        }
-                    </select>
-                    <ValidationMessage For="@(() => newTask.AssignedTo)" />
-                </div>
-                @*
-                <div class="form-group">
-                    <label for="familyGroup">Family Group:</label>
-                    <InputText id="familyGroup" @bind-Value="newTask.FamilyGroup" class="form-control" />
-                    <ValidationMessage For="@(() => newTask.FamilyGroup)" />
-                </div>
-                *@
-                <button type="submit" class="btn btn-primary">Create Task</button>
-            </EditForm>
-            @if (!string.IsNullOrEmpty(errorMessage))
+            <button class="btn btn-primary mb-3" @onclick="ToggleCreateTaskForm">
+                @(!showCreateTaskForm ? "Create New Task" : "Hide Task Form")
+            </button>
+
+            @if (showCreateTaskForm)
             {
-                <div class="alert alert-danger">@errorMessage</div>
+                <h4>Create a New Task</h4>
+                <EditForm Model="newTask" OnValidSubmit="HandleCreateTask">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <InputText id="title" @bind-Value="newTask.Title" class="form-control" />
+                        <ValidationMessage For="@(() => newTask.Title)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <InputTextArea id="description" @bind-Value="newTask.Description" class="form-control" />
+                        <ValidationMessage For="@(() => newTask.Description)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="assignedTo">Assign To:</label>
+                        <select id="assignedTo" @bind="newTask.AssignedTo" class="form-control">
+                            <option value="">Select User</option>
+                            @foreach (var user in familyUsers)
+                            {
+                                <option value="@user">@user</option>
+                            }
+                        </select>
+                        <ValidationMessage For="@(() => newTask.AssignedTo)" />
+                    </div>
+                    <button type="submit" class="btn btn-success">Create Task</button>
+                    <button type="button" class="btn btn-secondary ml-2" @onclick="ToggleCreateTaskForm">Cancel</button>
+                </EditForm>
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="alert alert-danger mt-2">@errorMessage</div>
+                }
             }
         }
 
@@ -105,6 +106,7 @@ else
     private string? username;
     private string? familyGroup;
     private List<string> familyUsers = new List<string>(); // List to hold family users
+    private bool showCreateTaskForm = false; // Controls visibility of Create Task form
 
     protected override async Task OnInitializedAsync()
     {
@@ -167,5 +169,17 @@ else
         AdminTaskManager.CreateTask(newTask.Title, newTask.Description, newTask.AssignedTo, newTask.FamilyGroup);
         LoadUserTasks(newTask.AssignedTo); // Reload user tasks after creating a new task
         newTask = new TodoTask("", ""); // Reset the form
+        showCreateTaskForm = false; // Hide the form after creation
+        NavigationManager.NavigateTo("/task-manager", true);
+    }
+
+    private void ToggleCreateTaskForm()
+    {
+        showCreateTaskForm = !showCreateTaskForm;
+        if (!showCreateTaskForm)
+        {
+            newTask = new TodoTask("", "");
+            errorMessage = string.Empty;
+        }
     }
 }
