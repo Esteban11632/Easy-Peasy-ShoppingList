@@ -36,19 +36,19 @@
             <div class="form-group">
                 <label for="newUsername">New Username:</label>
                 <InputText id="newUsername" @bind-Value="changeNameModel.NewUsername" class="form-control" />
-                <ValidationMessage For="@(() => changeNameModel.NewUsername)" />
+                @* <ValidationMessage For="@(() => changeNameModel.NewUsername)" /> *@
             </div>
 
             @if (!string.IsNullOrEmpty(successMessage))
             {
                 <div class="alert alert-success">@successMessage</div>
             }
-
+            @*
             @if (!string.IsNullOrEmpty(errorMessage))
             {
                 <div class="alert alert-danger">@errorMessage</div>
             }
-
+            *@
             <button type="submit" class="btn btn-success">Submit</button>
             <button type="button" class="btn btn-secondary"
                 @onclick="@(async () => await ToggleChangeNameForm())">Cancel</button>
@@ -61,7 +61,7 @@
                 Please ensure that you remember your new username as it will be used for future logins and identification
                 within the application.
                 Additionally, any references to your old username in tasks, family groups, or wishlists will be updated
-                automatically.
+                automatically. Also take note that you will be logged out after changing your username.
             </p>
             <p>
                 <em>Username Requirements:</em>
