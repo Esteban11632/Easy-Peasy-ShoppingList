@@ -110,20 +110,25 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+
+        // Get authentication state
         username = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "username");
         isAuthenticated = !string.IsNullOrEmpty(username);
 
         if (isAuthenticated)
         {
+
             isAdmin = LoginService.IsAdmin(username);
-            familyGroup = FamilyService.GetFamilyGroup(username); // This one is not async
-            familyUsers = await FamilyService.GetUsersInFamilyGroup(familyGroup); // Add await here
+            familyGroup = FamilyService.GetFamilyGroup(username);
+            familyUsers = await FamilyService.GetUsersInFamilyGroup(familyGroup);
             LoadUserTasks(username);
+
         }
         else
         {
             NavigationManager.NavigateTo("/login");
         }
+
     }
 
     private void LoadUserTasks(string username)

@@ -1,6 +1,6 @@
 namespace TaskManager
 {
-    public class UserTaskManager : IViewTask
+    public class UserTaskManager : IViewTask, IUpdateTask
     {
         private readonly ITaskStorage _storage; // The storage for the tasks
         public UserTaskManager(ITaskStorage storage) // Constructor for the UserTaskManager class
@@ -26,6 +26,11 @@ namespace TaskManager
                 Console.WriteLine($"Description: {task.Description}"); // Displays the description of the task
                 Console.WriteLine("------------------------");
             }
+        }
+
+        public void UpdateTaskAsync(TodoTask task) // Method to update the task to done or not done
+        {
+            _storage.UpdateTaskStatus(task.Title, task.FamilyGroup, task.IsDone); // Updates the task to done or not done
         }
 
     }

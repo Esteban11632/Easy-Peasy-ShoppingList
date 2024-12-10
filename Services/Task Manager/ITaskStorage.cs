@@ -5,5 +5,6 @@ namespace TaskManager
         Dictionary<string, TodoTask> LoadTasks(); // Method to load the tasks
         List<TodoTask> GetTasksByFamilyGroup(string familyGroup); // Method to get the tasks by family group
         void SaveTasks(Dictionary<string, TodoTask> tasks); // Method to save the tasks
+        void UpdateTaskStatus(string title, string familyGroup, bool isDone);  // New method
     }
 } 

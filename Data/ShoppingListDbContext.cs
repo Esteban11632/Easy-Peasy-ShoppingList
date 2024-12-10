@@ -10,6 +10,7 @@ namespace Easy_Peasy_ShoppingList.Data
 
         public DbSet<ShoppingItem> ShoppingItems { get; set; } = null!;
         public DbSet<WishlistItem> WishlistItems { get; set; } = null!;
+        public DbSet<TodoTaskEntity> Tasks { get; set; } = null!;
 
         public ShoppingListDbContext(DbContextOptions<ShoppingListDbContext> options)
             : base(options)
@@ -33,6 +34,10 @@ namespace Easy_Peasy_ShoppingList.Data
 
             modelBuilder.Entity<WishlistItem>()
                 .HasIndex(w => w.FamilyGroup);
+
+            modelBuilder.Entity<TodoTaskEntity>()
+                .HasIndex(t => new { t.Title, t.FamilyGroup })
+                .IsUnique();
         }
     }
 }
