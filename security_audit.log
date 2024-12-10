@@ -213,3 +213,15 @@
 {"Timestamp":"2024-12-10T04:10:24.4834571Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: TbBMuevSLE6P4rLsrn2UDA==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-10T04:11:25.1261328Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: OZVN50WXFEiJ0KCmmODSWg==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
 {"Timestamp":"2024-12-10T04:24:08.0725421Z","Username":"Adrian10","EventType":"LOGIN_SUCCESS","Details":"Session: kN7ExuREj0mTMbPWdvudlA==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:09:36.7395257Z","Username":"Adrian10","EventType":"LOGIN_SUCCESS","Details":"Session: Il9sKdjYz02fFVoUHhUgHw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:09:45.1399064Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: bcn3FQY4eE\u002BVKyMeKQ2GTw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:10:24.6623652Z","Username":"Adrian10","EventType":"LOGIN_SUCCESS","Details":"Session: Azx1M0KnBU2yrtoKJdsPTg==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:10:39.4135319Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: GLqBm72GDkuhqIMmdfQwKQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:10:52.9479953Z","Username":"Adrian10","EventType":"LOGIN_SUCCESS","Details":"Session: 2Zq2xWcEaEqBMrogAQpaAA==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:14:01.3901439Z","Username":"Adrian3","EventType":"LOGIN_SUCCESS","Details":"Session: \u002BpldyBLU90yifvKbQ9Bnxw==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:14:10.8649433Z","Username":"Adrian6","EventType":"LOGIN_SUCCESS","Details":"Session: U2CNPwjiRU6YkUhMZuCy4w==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:14:21.7660389Z","Username":"Adrian11","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:14:24.5079534Z","Username":"Adrian11","EventType":"LOGIN_ATTEMPT","Details":"Invalid username","Success":false,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:14:29.9738993Z","Username":"Adrian6","EventType":"LOGIN_SUCCESS","Details":"Session: z9KOdRYT9kCfdgcbD6zgCQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:14:39.1908972Z","Username":"BigBoss","EventType":"LOGIN_SUCCESS","Details":"Session: ET3Gc\u002BeqME\u002B3YAudDTsJeQ==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}
+{"Timestamp":"2024-12-10T05:14:53.7643763Z","Username":"Adrian12","EventType":"LOGIN_SUCCESS","Details":"Session: kNmBJAM7J0exKz7KW8fgww==","Success":true,"IpAddress":"IP_ADDRESS","UserAgent":"USER_AGENT"}

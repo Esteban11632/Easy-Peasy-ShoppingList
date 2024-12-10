@@ -45,38 +45,49 @@ Its also very important to note that if the application GitHub Desktop is instal
    dotnet restore
    ```
 
-4. **Update the Database**:
+4. **Install the Tools for the Database**:
+   Run the following command to install the tools for the database:
+
+   ```
+   dotnet tool install --global dotnet-ef
+   ```
+
+5. **Update the Database**:
    Run the following command to update / connect to the database:
 
    ```
    dotnet ef database update
    ```
 
-5. **Build the Project**:
+6. **Build the Project**:
    Build the project to ensure everything is set up correctly:
 
    ```
    dotnet build
    ```
 
-6. **Run the Application**:
+7. **Run the Application**:
    Start the application using the following command:
 
    ```
    dotnet run
    ```
 
-7. **Access the Application**:
+8. **Access the Application**:
    Open your web browser and navigate to `http://localhost:5000`
 
-Lastly, because the buttons to redirect the user to another page are not working, the main way you can change between pages is manually copy the URL and paste it into your browser.
+The Navigation Buttons now work perfectly, but still, in here I am sending you the URLs for the pages:
 
 This is the URL for the login page: `http://localhost:5000/login`
 
 This is the URL for the register page: `http://localhost:5000/register`
 
-Also to note, these last two pages cannot be accessed unless you are logged in.
+Also to note, these next pages cannot be accessed unless you are logged in. if you are not logged in, you will be redirected to the login page.
 
 This is the URL for the shopping list page: `http://localhost:5000/shopping-list`
 
 This is the URL for the task manager page: `http://localhost:5000/task-manager`
+
+This is the URL for the Wishlist page: `http://localhost:5000/wishlist`
+
+This is the URL for the settings page: `http://localhost:5000/settings`
