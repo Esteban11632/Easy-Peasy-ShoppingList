@@ -20,7 +20,7 @@ To download .NET SDK, you can go to this link and install choose the .NET 8.0 ve
 
 https://dotnet.microsoft.com/en-us/download
 
-Make sure to download the latest version.
+Make sure to download the .NET 8.0 version.
 
 After having everything installed, to run the application, follow these steps:
 
